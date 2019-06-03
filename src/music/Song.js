@@ -1,12 +1,13 @@
-import notes from './notes'
 import Simple from './instruments/Simple'
 
-console.log(JSON.stringify(notes))
+const audioContext = new AudioContext()
 
 export default class Song {
+  tempo = 168
+  notesPerBeat = 2
   tracks = [
     {
-      instrument: new Simple(),
+      instrument: new Simple(audioContext),
       notes: `
       G-4 --- --- --- --- ---
       C-4 --- --- --- --- ---
@@ -19,4 +20,22 @@ export default class Song {
       `,
     },
   ]
+
+  play() {
+    if (audioContext.state === 'suspended') {
+      audioContext.resume()
+    }
+    const notesPerMinute = this.notesPerBeat * this.tempo
+    const secondsPerNote = 60.0 / notesPerMinute
+    for (let track of this.tracks) {
+      const notes = track.notes.trim().split(/\s+/)
+      track.instrument.play(notes, secondsPerNote)
+    }
+  }
+
+  stop() {
+    for (let track of this.tracks) {
+      track.instrument.stop()
+    }
+  }
 }

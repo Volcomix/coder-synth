@@ -12,13 +12,13 @@ const frequencies = Array.from(
  * from `C-0` to `C-8` both inclusive.
  *
  * @example
- * console.log(notes['A-4']) // Outputs 440
- * console.log(notes['C#2']) // Outputs 69.29565774421803
+ * console.log(noteFrequencies['A-4']) // Outputs 440
+ * console.log(noteFrequencies['C#2']) // Outputs 69.29565774421803
  */
-const notes = frequencies.reduce((notes, frequency, i) => {
+const noteFrequencies = frequencies.reduce((notes, frequency, i) => {
   const octave = Math.floor(i / 12)
   const noteName = noteNames[i % 12]
   return Object.assign(notes, { [`${noteName}${octave}`]: frequency })
 }, {})
 
-export default notes
+export default noteFrequencies
