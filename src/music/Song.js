@@ -26,7 +26,7 @@ export default class Song {
       audioContext.resume()
     }
     const notesPerMinute = this.notesPerBeat * this.tempo
-    const secondsPerNote = 60.0 / notesPerMinute
+    const secondsPerNote = 60 / notesPerMinute
     for (let track of this.tracks) {
       const notes = track.notes.trim().split(/\s+/)
       track.instrument.play(notes, secondsPerNote)
