@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
 import store from './store'
-import './music/Song'
 
 Vue.config.productionTip = false
 

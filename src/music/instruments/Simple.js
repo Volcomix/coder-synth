@@ -1,4 +1,4 @@
-import Instrument from './Instrument'
+import Instrument from '../common/Instrument'
 
 export default class Simple extends Instrument {
   start() {

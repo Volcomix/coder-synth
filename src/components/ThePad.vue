@@ -7,13 +7,13 @@
 </template>
 
 <script>
-import Song from '../music/Song'
+import Workshop1906 from '../music/songs/Workshop1906'
 
 export default {
   data() {
     return {
       isPlaying: false,
-      song: new Song(),
+      song: new Workshop1906(),
     }
   },
   methods: {
