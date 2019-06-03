@@ -1,28 +1,27 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <ThePad />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import ThePad from './components/ThePad.vue'
 
 export default {
   name: 'app',
   components: {
-    HelloWorld,
+    ThePad,
   },
 }
 </script>
 
+<style src="./styles/theme.css"></style>
+<style src="./styles/typography.css"></style>
 <style>
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+}
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
