@@ -1,9 +1,26 @@
 <template>
-  <div>
-    The Pad
-    <button v-if="isPlaying" @click="stop">Stop</button>
-    <button v-else @click="play">Play</button>
-  </div>
+  <v-btn
+    v-if="isPlaying"
+    fab
+    dark
+    small
+    color="error"
+    class="elevation-2"
+    @click="stop"
+  >
+    <v-icon dark>stop</v-icon>
+  </v-btn>
+  <v-btn
+    v-else
+    fab
+    dark
+    small
+    color="primary"
+    class="elevation-6"
+    @click="play"
+  >
+    <v-icon dark>play_arrow</v-icon>
+  </v-btn>
 </template>
 
 <script>
