@@ -1,10 +1,9 @@
 export default class Song {
-  audioContext = new AudioContext()
+  constructor(audioContext) {
+    this.audioContext = audioContext
+  }
 
   play() {
-    if (this.audioContext.state === 'suspended') {
-      this.audioContext.resume()
-    }
     const notesPerMinute = this.notesPerBeat * this.tempo
     const secondsPerNote = 60 / notesPerMinute
     for (let track of this.tracks) {

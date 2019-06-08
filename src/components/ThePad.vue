@@ -13,11 +13,14 @@ export default {
   data() {
     return {
       isPlaying: false,
-      song: new Workshop1906(),
+      song: null,
     }
   },
   methods: {
     play() {
+      if (!this.song) {
+        this.song = new Workshop1906(new AudioContext())
+      }
       this.song.play()
       this.isPlaying = true
     },

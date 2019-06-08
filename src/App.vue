@@ -15,12 +15,9 @@ export default {
 }
 </script>
 
-<style src="./styles/theme.css"></style>
-<style src="./styles/typography.css"></style>
 <style>
 body {
   margin: 0;
-  font-family: 'Roboto', sans-serif;
 }
 #app {
 }

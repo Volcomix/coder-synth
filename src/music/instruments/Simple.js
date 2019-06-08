@@ -19,5 +19,5 @@ export default class Simple extends Instrument {
     this.oscillator.frequency.setValueAtTime(0, time)
   }
 
-  setEffects(effects) {}
+  // setEffects(effects) {}
 }
