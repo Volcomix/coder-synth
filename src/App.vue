@@ -1,22 +1,6 @@
 <template>
   <v-app>
-    <v-card>
-      <v-list>
-        <v-list-tile
-          v-for="(Song, songName) in songs"
-          :key="songName"
-          ripple
-          @click="play(Song)"
-        >
-          <v-list-tile-action>
-            <v-icon v-if="isPlaying(Song)" color="teal">play_arrow</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title v-text="songName"></v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-      </v-list>
-    </v-card>
+    <router-view />
   </v-app>
 </template>
 
@@ -27,7 +11,7 @@ export default {
   data() {
     return {
       audioContext: null,
-      playingSong: null,
+      songName: Object.keys(songs)[0],
     }
   },
   computed: {
