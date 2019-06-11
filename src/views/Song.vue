@@ -26,7 +26,7 @@
     <VToolbar dark color="primary">
       <VToolbarSideIcon @click="drawer = !drawer" />
       <VToolbarTitle class="white--text">{{ songName }}</VToolbarTitle>
-      <VBtn v-if="song" icon @click="stop">
+      <VBtn v-if="isPlaying" icon @click="stop">
         <VIcon color="error">stop</VIcon>
       </VBtn>
       <VBtn v-else icon @click="play">
@@ -67,6 +67,7 @@ export default {
       drawer: null,
       audioContext: null,
       song: null,
+      isPlaying: false,
     }
   },
   computed: {
@@ -83,23 +84,28 @@ export default {
       return this.$route.params.instrumentName
     },
   },
+  created() {
+    this.audioContext = new AudioContext()
+    this.createSong()
+  },
   beforeRouteUpdate(to, from, next) {
-    if (this.song) {
+    if (this.isPlaying) {
       this.stop()
     }
+    this.createSong()
     next()
   },
   methods: {
-    play() {
-      if (!this.audioContext) {
-        this.audioContext = new AudioContext()
-      }
+    createSong() {
       this.song = new songs[this.songName](this.audioContext)
+    },
+    play() {
       this.song.play()
+      this.isPlaying = true
     },
     stop() {
       this.song.stop()
-      this.song = null
+      this.isPlaying = false
     },
   },
 }
