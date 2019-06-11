@@ -1,38 +1,38 @@
 <template>
   <div>
-    <v-toolbar dark color="primary">
-      <v-toolbar-side-icon @click="drawer = !drawer"></v-toolbar-side-icon>
-      <v-toolbar-title class="white--text">{{ songName }}</v-toolbar-title>
-      <v-btn v-if="song" icon @click="stop">
-        <v-icon color="error">stop</v-icon>
-      </v-btn>
-      <v-btn v-else icon @click="play">
-        <v-icon>play_arrow</v-icon>
-      </v-btn>
-    </v-toolbar>
-    <v-navigation-drawer v-model="drawer" absolute temporary>
-      <v-toolbar flat>
-        <v-list>
-          <v-list-tile>
-            <v-list-tile-content>
-              <v-list-tile-title class="title">Songs</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-        </v-list>
-      </v-toolbar>
-      <v-divider></v-divider>
-      <v-list>
-        <v-list-tile
+    <VToolbar dark color="primary">
+      <VToolbarSideIcon @click="drawer = !drawer" />
+      <VToolbarTitle class="white--text">{{ songName }}</VToolbarTitle>
+      <VBtn v-if="song" icon @click="stop">
+        <VIcon color="error">stop</VIcon>
+      </VBtn>
+      <VBtn v-else icon @click="play">
+        <VIcon>play_arrow</VIcon>
+      </VBtn>
+    </VToolbar>
+    <VNavigationDrawer v-model="drawer" absolute temporary>
+      <VToolbar flat>
+        <VList>
+          <VListTile>
+            <VListTileContent>
+              <VListTileTitle class="title">Songs</VListTileTitle>
+            </VListTileContent>
+          </VListTile>
+        </VList>
+      </VToolbar>
+      <VDivider />
+      <VList>
+        <VListTile
           v-for="(Song, songName) in songs"
           :key="songName"
           :to="{ name: 'song', params: { songName } }"
         >
-          <v-list-tile-content>
-            <v-list-tile-title>{{ songName }}</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-      </v-list>
-    </v-navigation-drawer>
+          <VListTileContent>
+            <VListTileTitle>{{ songName }}</VListTileTitle>
+          </VListTileContent>
+        </VListTile>
+      </VList>
+    </VNavigationDrawer>
   </div>
 </template>
 
