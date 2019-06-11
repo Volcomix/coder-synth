@@ -2,11 +2,11 @@
   <div>
     <v-toolbar dark color="primary">
       <v-toolbar-side-icon @click="drawer = !drawer"></v-toolbar-side-icon>
-      <v-toolbar-title class="white--text">
-        {{ $route.params.songName }}
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn icon>
+      <v-toolbar-title class="white--text">{{ songName }}</v-toolbar-title>
+      <v-btn v-if="song" icon @click="stop">
+        <v-icon color="error">stop</v-icon>
+      </v-btn>
+      <v-btn v-else icon @click="play">
         <v-icon>play_arrow</v-icon>
       </v-btn>
     </v-toolbar>
@@ -43,14 +43,35 @@ export default {
   data() {
     return {
       drawer: null,
+      audioContext: null,
+      song: null,
     }
   },
   computed: {
     songs() {
       return songs
     },
-    song() {
-      return songs[this.$route.params.songName]
+    songName() {
+      return this.$route.params.songName
+    },
+  },
+  beforeRouteUpdate(to, from, next) {
+    if (this.song) {
+      this.stop()
+    }
+    next()
+  },
+  methods: {
+    play() {
+      if (!this.audioContext) {
+        this.audioContext = new AudioContext()
+      }
+      this.song = new songs[this.songName](this.audioContext)
+      this.song.play()
+    },
+    stop() {
+      this.song.stop()
+      this.song = null
     },
   },
 }
