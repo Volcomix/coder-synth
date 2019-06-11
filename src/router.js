@@ -25,7 +25,7 @@ export default new Router({
       component: Song,
       children: [
         {
-          path: ':instrumentName',
+          path: ':track',
           name: 'instrument',
           component: Instrument,
         },

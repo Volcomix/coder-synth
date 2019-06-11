@@ -36,17 +36,21 @@
       <VMenu :nudge-width="100">
         <template v-slot:activator="{ on }">
           <VToolbarTitle v-on="on">
-            <span>{{ instrumentName }}</span>
+            <span v-if="track !== null">
+              Track {{ track + 1 }} ({{ instrumentName }})
+            </span>
             <VIcon dark>arrow_drop_down</VIcon>
           </VToolbarTitle>
         </template>
         <VList>
           <VListTile
-            v-for="(Instrument, instrumentName) in instruments"
+            v-for="(instrumentName, index) in instrumentNames"
             :key="instrumentName"
-            :to="{ name: 'instrument', params: { instrumentName } }"
+            :to="{ name: 'instrument', params: { track: index + 1 } }"
           >
-            <VListTileTitle>{{ instrumentName }}</VListTileTitle>
+            <VListTileTitle>
+              Track {{ index + 1 }} ({{ instrumentName }})
+            </VListTileTitle>
           </VListTile>
         </VList>
       </VMenu>
@@ -59,7 +63,6 @@
 
 <script>
 import songs from '../music/songs'
-import instruments from '../music/instruments'
 
 export default {
   data() {
@@ -77,11 +80,22 @@ export default {
     songName() {
       return this.$route.params.songName
     },
-    instruments() {
-      return instruments
+    instrumentNames() {
+      return this.song.tracks.map(track => track.instrument.constructor.name)
+    },
+    track() {
+      if (this.$route.params.track === undefined) {
+        return null
+      } else {
+        return this.$route.params.track - 1
+      }
     },
     instrumentName() {
-      return this.$route.params.instrumentName
+      if (this.track === null) {
+        return null
+      } else {
+        return this.song.tracks[this.track].instrument.constructor.name
+      }
     },
   },
   created() {
