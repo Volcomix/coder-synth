@@ -9,6 +9,24 @@
       <VBtn v-else icon @click="play">
         <VIcon>play_arrow</VIcon>
       </VBtn>
+      <VSpacer />
+      <VMenu :nudge-width="100">
+        <template v-slot:activator="{ on }">
+          <VToolbarTitle v-on="on">
+            <span>{{ instrumentName }}</span>
+            <VIcon dark>arrow_drop_down</VIcon>
+          </VToolbarTitle>
+        </template>
+        <VList>
+          <VListTile
+            v-for="(Instrument, instrumentName) in instruments"
+            :key="instrumentName"
+            :to="{ name: 'instrument', params: { instrumentName } }"
+          >
+            <VListTileTitle>{{ instrumentName }}</VListTileTitle>
+          </VListTile>
+        </VList>
+      </VMenu>
     </VToolbar>
     <VNavigationDrawer v-model="drawer" absolute temporary>
       <VToolbar flat>
@@ -33,11 +51,13 @@
         </VListTile>
       </VList>
     </VNavigationDrawer>
+    <RouterView />
   </div>
 </template>
 
 <script>
 import songs from '../music/songs'
+import instruments from '../music/instruments'
 
 export default {
   data() {
@@ -53,6 +73,12 @@ export default {
     },
     songName() {
       return this.$route.params.songName
+    },
+    instruments() {
+      return instruments
+    },
+    instrumentName() {
+      return this.$route.params.instrumentName
     },
   },
   beforeRouteUpdate(to, from, next) {
