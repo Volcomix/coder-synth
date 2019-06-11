@@ -1,5 +1,28 @@
 <template>
-  <div>
+  <VApp>
+    <VNavigationDrawer v-model="drawer" absolute temporary>
+      <VToolbar flat>
+        <VList>
+          <VListTile>
+            <VListTileContent>
+              <VListTileTitle class="title">Songs</VListTileTitle>
+            </VListTileContent>
+          </VListTile>
+        </VList>
+      </VToolbar>
+      <VDivider />
+      <VList>
+        <VListTile
+          v-for="(Song, songName) in songs"
+          :key="songName"
+          :to="{ name: 'song', params: { songName } }"
+        >
+          <VListTileContent>
+            <VListTileTitle>{{ songName }}</VListTileTitle>
+          </VListTileContent>
+        </VListTile>
+      </VList>
+    </VNavigationDrawer>
     <VToolbar dark color="primary">
       <VToolbarSideIcon @click="drawer = !drawer" />
       <VToolbarTitle class="white--text">{{ songName }}</VToolbarTitle>
@@ -28,31 +51,10 @@
         </VList>
       </VMenu>
     </VToolbar>
-    <VNavigationDrawer v-model="drawer" absolute temporary>
-      <VToolbar flat>
-        <VList>
-          <VListTile>
-            <VListTileContent>
-              <VListTileTitle class="title">Songs</VListTileTitle>
-            </VListTileContent>
-          </VListTile>
-        </VList>
-      </VToolbar>
-      <VDivider />
-      <VList>
-        <VListTile
-          v-for="(Song, songName) in songs"
-          :key="songName"
-          :to="{ name: 'song', params: { songName } }"
-        >
-          <VListTileContent>
-            <VListTileTitle>{{ songName }}</VListTileTitle>
-          </VListTileContent>
-        </VListTile>
-      </VList>
-    </VNavigationDrawer>
-    <RouterView />
-  </div>
+    <VContent>
+      <RouterView />
+    </VContent>
+  </VApp>
 </template>
 
 <script>
