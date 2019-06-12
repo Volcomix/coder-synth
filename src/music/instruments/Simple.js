@@ -19,5 +19,7 @@ export default class Simple extends Instrument {
     this.oscillator.frequency.setValueAtTime(0, time)
   }
 
-  // setEffects(effects) {}
+  fxDetune(detune, time) {
+    this.oscillator.detune.setValueAtTime(detune, time)
+  }
 }
