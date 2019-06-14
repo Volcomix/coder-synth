@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Song from './views/Song.vue'
+import Song from './views/Song'
 import songs from './music/songs'
 
 Vue.use(Router)
