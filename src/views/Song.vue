@@ -36,17 +36,21 @@
       <VMenu :nudge-width="100">
         <template v-slot:activator="{ on }">
           <VToolbarTitle v-on="on">
-            <span v-if="track !== null">
-              Track {{ track + 1 }} ({{ instrumentName }})
-            </span>
+            <span v-if="track === null">All tracks</span>
+            <span v-else> Track {{ track + 1 }} ({{ instrumentName }}) </span>
             <VIcon dark>arrow_drop_down</VIcon>
           </VToolbarTitle>
         </template>
         <VList>
+          <VListTile :to="{ params: { track: null } }" exact>
+            <VListTileTitle>
+              All tracks
+            </VListTileTitle>
+          </VListTile>
           <VListTile
             v-for="(instrumentName, index) in instrumentNames"
             :key="instrumentName"
-            :to="{ name: 'instrument', params: { track: index + 1 } }"
+            :to="{ params: { track: index + 1 } }"
           >
             <VListTileTitle>
               Track {{ index + 1 }} ({{ instrumentName }})
@@ -56,15 +60,19 @@
       </VMenu>
     </VToolbar>
     <VContent>
-      <RouterView />
+      <Instrument />
     </VContent>
   </VApp>
 </template>
 
 <script>
+import Instrument from '../components/Instrument'
 import songs from '../music/songs'
 
 export default {
+  components: {
+    Instrument,
+  },
   data() {
     return {
       drawer: null,
@@ -84,7 +92,7 @@ export default {
       return this.song.tracks.map(track => track.instrument.constructor.name)
     },
     track() {
-      if (this.$route.params.track === undefined) {
+      if (this.$route.params.track == null) {
         return null
       } else {
         return this.$route.params.track - 1
@@ -102,16 +110,17 @@ export default {
     this.audioContext = new AudioContext()
     this.createSong()
   },
-  beforeRouteUpdate(to, from, next) {
-    if (this.isPlaying) {
-      this.stop()
-    }
-    this.createSong()
-    next()
+  watch: {
+    $route() {
+      if (this.isPlaying) {
+        this.stop()
+      }
+      this.createSong()
+    },
   },
   methods: {
     createSong() {
-      this.song = new songs[this.songName](this.audioContext)
+      this.song = new songs[this.songName](this.audioContext, this.track)
     },
     play() {
       this.song.play()

@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Song from './views/Song.vue'
-import Instrument from './components/Instrument.vue'
 import songs from './music/songs'
 
 Vue.use(Router)
@@ -20,16 +19,9 @@ export default new Router({
       },
     },
     {
-      path: '/:songName',
+      path: '/:songName/:track?',
       name: 'song',
       component: Song,
-      children: [
-        {
-          path: ':track',
-          name: 'instrument',
-          component: Instrument,
-        },
-      ],
     },
   ],
 })
