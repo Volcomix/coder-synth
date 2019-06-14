@@ -14,7 +14,11 @@
       <TracksMenu :song="song" :track="track" />
     </VToolbar>
     <VContent>
-      <TrackEffects v-if="instrument" :instrument="instrument" />
+      <TrackEffects
+        v-if="instrument"
+        :instrument="instrument"
+        :isPlaying="isPlaying"
+      />
     </VContent>
   </VApp>
 </template>

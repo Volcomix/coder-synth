@@ -22,6 +22,6 @@ export default class Gain extends Instrument {
   }
 
   fxGain(gain, time) {
-    this.gain.gain.setValueAtTime(gain, time)
+    this.gain.gain.setValueAtTime((10 * gain) / 255, time)
   }
 }
