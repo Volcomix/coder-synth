@@ -14,7 +14,7 @@
       <TracksMenu :song="song" :track="track" />
     </VToolbar>
     <VContent>
-      <Instrument />
+      <TrackEffects v-if="instrument" :instrument="instrument" />
     </VContent>
   </VApp>
 </template>
@@ -22,14 +22,14 @@
 <script>
 import SongsDrawer from '../components/SongsDrawer'
 import TracksMenu from '../components/TracksMenu'
-import Instrument from '../components/Instrument'
+import TrackEffects from '../components/TrackEffects'
 import songs from '../music/songs'
 
 export default {
   components: {
     SongsDrawer,
     TracksMenu,
-    Instrument,
+    TrackEffects,
   },
   data() {
     return {
@@ -51,6 +51,13 @@ export default {
         return null
       } else {
         return this.$route.params.track - 1
+      }
+    },
+    instrument() {
+      if (this.track == null) {
+        return null
+      } else {
+        return this.song.tracks[this.track].instrument
       }
     },
   },
