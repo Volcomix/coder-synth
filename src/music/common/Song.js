@@ -23,11 +23,24 @@ export default class Song {
   }
 
   playTrack(track, timePerNote) {
-    const notes = track.notes.trim().split(/\s+/)
-    track.instrument.play(notes, timePerNote)
+    const notes = this.parseCommands(track.notes)
+    const effects =
+      track.effects &&
+      Object.entries(track.effects).reduce(
+        (result, [effectName, effectValues]) =>
+          Object.assign(result, {
+            [effectName]: this.parseCommands(effectValues),
+          }),
+        {},
+      )
+    track.instrument.play(notes, effects, timePerNote)
   }
 
   stopTrack(track) {
     track.instrument.stop()
+  }
+
+  parseCommands(commands) {
+    return commands.trim().split(/\s+/)
   }
 }

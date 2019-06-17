@@ -3,7 +3,9 @@ import Instrument from '../common/Instrument'
 export default class Simple extends Instrument {
   start() {
     this.oscillator = this.audioContext.createOscillator()
-    this.oscillator.connect(this.audioContext.destination)
+    this.gain = this.audioContext.createGain()
+    this.oscillator.connect(this.gain)
+    this.gain.connect(this.audioContext.destination)
     this.oscillator.start()
   }
 
@@ -19,7 +21,7 @@ export default class Simple extends Instrument {
     this.oscillator.frequency.setValueAtTime(0, time)
   }
 
-  fxDetune(detune, time) {
-    this.oscillator.detune.setValueAtTime(detune, time)
+  fxVolume(volume, time) {
+    this.gain.gain.setValueAtTime(volume / 255, time)
   }
 }

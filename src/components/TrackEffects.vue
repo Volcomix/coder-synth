@@ -29,9 +29,9 @@ export default {
     },
   },
   methods: {
-    setEffect(effectName, value) {
+    setEffect(effectName, effectValue) {
       if (this.isPlaying) {
-        this.instrument[`fx${effectName}`](value, 0)
+        this.instrument.setEffect(effectName, effectValue)
       }
     },
   },
