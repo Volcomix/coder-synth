@@ -7,11 +7,11 @@ export default class Demo extends Song {
   notesPerBeat = 2
   tracks = [
     {
-      instrument: new Oscillator(this.audioContext),
+      instrument: new Oscillator(this.audioContext, this.destination),
       notes: 'C-4',
     },
     {
-      instrument: new Gain(this.audioContext),
+      instrument: new Gain(this.audioContext, this.destination),
       notes: 'C-4',
     },
   ]

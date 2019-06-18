@@ -5,7 +5,7 @@ export default class Gain extends Instrument {
     this.oscillator = this.audioContext.createOscillator()
     this.gain = this.audioContext.createGain()
     this.oscillator.connect(this.gain)
-    this.gain.connect(this.audioContext.destination)
+    this.gain.connect(this.destination)
     this.oscillator.start()
   }
 

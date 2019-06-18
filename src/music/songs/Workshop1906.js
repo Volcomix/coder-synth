@@ -6,7 +6,7 @@ export default class Workshop1906 extends Song {
   notesPerBeat = 2
   tracks = [
     {
-      instrument: new Simple(this.audioContext),
+      instrument: new Simple(this.audioContext, this.destination),
       notes: `
         G-4 --- --- --- --- ---
         C-4 --- --- --- --- ---

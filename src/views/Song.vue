@@ -39,6 +39,7 @@ export default {
     return {
       drawer: null,
       audioContext: null,
+      analyser: null,
       song: null,
       isPlaying: false,
     }
@@ -67,6 +68,8 @@ export default {
   },
   created() {
     this.audioContext = new AudioContext()
+    this.analyser = this.audioContext.createAnalyser()
+    this.analyser.connect(this.audioContext.destination)
     this.createSong()
   },
   watch: {
@@ -79,7 +82,11 @@ export default {
   },
   methods: {
     createSong() {
-      this.song = new songs[this.songName](this.audioContext, this.track)
+      this.song = new songs[this.songName](
+        this.audioContext,
+        this.analyser,
+        this.track,
+      )
     },
     play() {
       this.song.play()

@@ -3,9 +3,11 @@ import noteFrequencies from './noteFrequencies'
 export default class Instrument {
   /**
    * @param {AudioContext} audioContext
+   * @param {AudioDestinationNode} destination
    */
-  constructor(audioContext) {
+  constructor(audioContext, destination) {
     this.audioContext = audioContext
+    this.destination = destination
   }
 
   play(notes, effects, timePerNote) {

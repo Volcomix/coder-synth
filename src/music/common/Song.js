@@ -1,6 +1,7 @@
 export default class Song {
-  constructor(audioContext, track) {
+  constructor(audioContext, destination, track) {
     this.audioContext = audioContext
+    this.destination = destination
     this.track = track
   }
 
