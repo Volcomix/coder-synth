@@ -28,11 +28,16 @@ export default {
     this.context = this.$refs.canvas.getContext('2d')
     this.draw()
   },
+  updated() {
+    this.resize()
+  },
   methods: {
     resize() {
       const { width, height } = this.$refs.oscilloscope.getBoundingClientRect()
-      this.width = width
-      this.height = height
+      if (width !== this.width || height !== this.height) {
+        this.width = width
+        this.height = height
+      }
     },
     draw() {
       requestAnimationFrame(this.draw)

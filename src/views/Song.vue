@@ -22,7 +22,7 @@
             :instrument="instrument"
             :isPlaying="isPlaying"
           />
-          <Oscilloscope :analyser="analyser" />
+          <Oscilloscope :key="`${songName}-${track}`" :analyser="analyser" />
         </VLayout>
       </VContainer>
     </VContent>
