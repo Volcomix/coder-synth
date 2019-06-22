@@ -4,7 +4,7 @@
       <VSlider
         v-for="effectName in effectNames"
         :key="effectName"
-        thumb-label
+        thumb-label="always"
         :max="255"
         :label="effectName"
         @input="setEffect(effectName, $event)"

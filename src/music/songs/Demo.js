@@ -15,7 +15,7 @@ export default class Demo extends Song {
       instrument: new Gain(this.audioContext, this.destination),
       notes: Object.keys(noteFrequencies)[47],
       effects: {
-        detune: (79).toString(16),
+        detune: '079',
       },
     },
   ]

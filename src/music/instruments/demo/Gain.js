@@ -22,7 +22,7 @@ export default class Gain extends Instrument {
     this.oscillator.frequency.setValueAtTime(0, time)
   }
 
-  fxFrequency(frequency, time) {
+  fxPitch(frequency, time) {
     const noteFrequency = Object.values(noteFrequencies)[frequency]
     if (noteFrequency !== undefined) {
       this.oscillator.frequency.setValueAtTime(noteFrequency, time)
