@@ -1,12 +1,12 @@
 import Song from '../common/Song'
-import Simple from '../instruments/Simple'
+import StringMachines from '../instruments/StringMachines'
 
-export default class Workshop1906 extends Song {
+export default class Workshop1907 extends Song {
   tempo = 168
   notesPerBeat = 2
   tracks = [
     {
-      instrument: new Simple(this.audioContext, this.destination),
+      instrument: new StringMachines(this.audioContext, this.destination),
       notes: `
         G-4 --- --- --- --- ---
         C-4 --- --- --- --- ---

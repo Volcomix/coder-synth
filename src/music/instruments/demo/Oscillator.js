@@ -20,10 +20,10 @@ export default class Oscillator extends Instrument {
     this.oscillator.frequency.setValueAtTime(0, time)
   }
 
-  fxPitch(frequency, time) {
-    const noteFrequency = Object.values(noteFrequencies)[frequency]
-    if (noteFrequency !== undefined) {
-      this.oscillator.frequency.setValueAtTime(noteFrequency, time)
+  fxPitch(pitch, time) {
+    const frequency = Object.values(noteFrequencies)[pitch]
+    if (frequency !== undefined) {
+      this.oscillator.frequency.setValueAtTime(frequency, time)
     }
   }
 

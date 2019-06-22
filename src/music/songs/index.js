@@ -1,7 +1,9 @@
 import Demo from './Demo'
-import Workshop1906 from './Workshop1906'
+import StringMachines from './StringMachines'
+import Workshop1907 from './Workshop1907'
 
 export default {
   Demo,
-  Workshop1906,
+  StringMachines,
+  Workshop1907,
 }
