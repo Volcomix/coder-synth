@@ -14,17 +14,14 @@
       <TracksMenu :song="song" :track="track" />
     </VToolbar>
     <VContent>
-      <VContainer fill-height fluid>
-        <VLayout column>
-          <TrackEffects
-            v-if="instrument"
-            class="mb-3"
-            :instrument="instrument"
-            :isPlaying="isPlaying"
-          />
-          <Oscilloscope :key="`${songName}-${track}`" :analyser="analyser" />
-        </VLayout>
-      </VContainer>
+      <VLayout fill-height column>
+        <TrackEffects
+          v-if="instrument"
+          :instrument="instrument"
+          :isPlaying="isPlaying"
+        />
+        <Oscilloscope :key="`${songName}-${track}`" :analyser="analyser" />
+      </VLayout>
     </VContent>
   </VApp>
 </template>

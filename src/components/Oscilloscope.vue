@@ -1,5 +1,5 @@
 <template>
-  <VFlex ref="oscilloscope" v-resize="resize">
+  <VFlex ref="oscilloscope" my-3 v-resize="resize">
     <canvas ref="canvas" class="canvas" :width="width" :height="height" />
   </VFlex>
 </template>

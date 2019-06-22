@@ -1,5 +1,5 @@
 <template>
-  <VCard>
+  <VCard class="pt-3">
     <VCardText>
       <VSlider
         v-for="effectName in effectNames"
