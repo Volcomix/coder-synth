@@ -2,6 +2,7 @@ import noteFrequencies from './noteFrequencies'
 
 export default class Instrument {
   /**
+   * TODO Remove all constructor params and add them to the play method
    * @param {AudioContext} audioContext
    * @param {AudioDestinationNode} destination
    */

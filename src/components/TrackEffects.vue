@@ -1,16 +1,16 @@
 <template>
-  <v-card>
-    <v-card-text>
-      <v-slider
+  <VCard>
+    <VCardText>
+      <VSlider
         v-for="effectName in effectNames"
         :key="effectName"
         thumb-label
         :max="255"
         :label="effectName"
         @input="setEffect(effectName, $event)"
-      ></v-slider>
-    </v-card-text>
-  </v-card>
+      ></VSlider>
+    </VCardText>
+  </VCard>
 </template>
 
 <script>

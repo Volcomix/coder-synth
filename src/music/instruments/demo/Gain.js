@@ -1,3 +1,4 @@
+import noteFrequencies from '../../common/noteFrequencies'
 import Instrument from '../../common/Instrument'
 
 export default class Gain extends Instrument {
@@ -21,7 +22,18 @@ export default class Gain extends Instrument {
     this.oscillator.frequency.setValueAtTime(0, time)
   }
 
+  fxFrequency(frequency, time) {
+    const noteFrequency = Object.values(noteFrequencies)[frequency]
+    if (noteFrequency !== undefined) {
+      this.oscillator.frequency.setValueAtTime(noteFrequency, time)
+    }
+  }
+
+  fxDetune(detune, time) {
+    this.oscillator.detune.setValueAtTime(detune, time)
+  }
+
   fxGain(gain, time) {
-    this.gain.gain.setValueAtTime((10 * gain) / 255, time)
+    this.gain.gain.setValueAtTime((2 * gain) / 255, time)
   }
 }

@@ -1,6 +1,7 @@
 import Song from '../common/Song'
 import Oscillator from '../instruments/demo/Oscillator'
 import Gain from '../instruments/demo/Gain'
+import noteFrequencies from '../common/noteFrequencies'
 
 export default class Demo extends Song {
   tempo = 120
@@ -12,7 +13,10 @@ export default class Demo extends Song {
     },
     {
       instrument: new Gain(this.audioContext, this.destination),
-      notes: 'C-4',
+      notes: Object.keys(noteFrequencies)[47],
+      effects: {
+        detune: (79).toString(16),
+      },
     },
   ]
 }

@@ -14,11 +14,17 @@
       <TracksMenu :song="song" :track="track" />
     </VToolbar>
     <VContent>
-      <TrackEffects
-        v-if="instrument"
-        :instrument="instrument"
-        :isPlaying="isPlaying"
-      />
+      <VContainer fill-height fluid>
+        <VLayout column>
+          <TrackEffects
+            v-if="instrument"
+            class="mb-3"
+            :instrument="instrument"
+            :isPlaying="isPlaying"
+          />
+          <Oscilloscope :analyser="analyser" />
+        </VLayout>
+      </VContainer>
     </VContent>
   </VApp>
 </template>
@@ -27,6 +33,7 @@
 import SongsDrawer from '../components/SongsDrawer'
 import TracksMenu from '../components/TracksMenu'
 import TrackEffects from '../components/TrackEffects'
+import Oscilloscope from '../components/Oscilloscope'
 import songs from '../music/songs'
 
 export default {
@@ -34,6 +41,7 @@ export default {
     SongsDrawer,
     TracksMenu,
     TrackEffects,
+    Oscilloscope,
   },
   data() {
     return {
@@ -66,12 +74,6 @@ export default {
       }
     },
   },
-  created() {
-    this.audioContext = new AudioContext()
-    this.analyser = this.audioContext.createAnalyser()
-    this.analyser.connect(this.audioContext.destination)
-    this.createSong()
-  },
   watch: {
     $route() {
       if (this.isPlaying) {
@@ -79,6 +81,13 @@ export default {
       }
       this.createSong()
     },
+  },
+  created() {
+    this.audioContext = new AudioContext()
+    this.analyser = this.audioContext.createAnalyser()
+    this.analyser.fftSize = 2048
+    this.analyser.connect(this.audioContext.destination)
+    this.createSong()
   },
   methods: {
     createSong() {
