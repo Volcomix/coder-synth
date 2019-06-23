@@ -14,18 +14,18 @@ export default class StringMachines extends Instrument {
 
     this.gain2 = this.audioContext.createGain()
 
-    this.vibrato = this.audioContext.createOscillator()
-    this.vibrato.type = 'triangle'
-    this.vibrato.frequency.value = 4
+    this.vibratoSpeed = this.audioContext.createOscillator()
+    this.vibratoSpeed.type = 'triangle'
+    this.vibratoSpeed.frequency.value = 4.08
 
-    this.vibratoGain = this.audioContext.createGain()
-    this.vibratoGain.gain.value = 6
+    this.vibratoDepth = this.audioContext.createGain()
+    this.vibratoDepth.gain.value = 2.74
 
     this.volume = this.audioContext.createGain()
     this.volume.gain.value = 1
 
-    this.vibrato.connect(this.vibratoGain)
-    this.vibratoGain.connect(this.oscillator1.frequency)
+    this.vibratoSpeed.connect(this.vibratoDepth)
+    this.vibratoDepth.connect(this.oscillator1.frequency)
     this.oscillator1.connect(this.gain1)
     this.oscillator2.connect(this.gain2)
     this.gain1.connect(this.volume)
@@ -34,13 +34,13 @@ export default class StringMachines extends Instrument {
 
     this.oscillator1.start()
     this.oscillator2.start()
-    this.vibrato.start()
+    this.vibratoSpeed.start()
   }
 
   stop() {
     this.oscillator1.stop()
     this.oscillator2.stop()
-    this.vibrato.stop()
+    this.vibratoSpeed.stop()
   }
 
   noteOn(noteFrequency, time) {
@@ -55,38 +55,24 @@ export default class StringMachines extends Instrument {
     this.gain2.gain.setValueAtTime(0, time)
   }
 
-  fxPitch1(pitch, time) {
+  fxPitch(pitch, time) {
     const frequency = Object.values(noteFrequencies)[pitch]
     if (frequency !== undefined) {
       this.oscillator1.frequency.setValueAtTime(frequency, time)
-    }
-  }
-
-  fxPitch2(pitch, time) {
-    const frequency = Object.values(noteFrequencies)[pitch]
-    if (frequency !== undefined) {
       this.oscillator2.frequency.setValueAtTime(frequency, time)
     }
   }
 
-  fxDetune2(detune, time) {
+  fxDetune(detune, time) {
     this.oscillator2.detune.setValueAtTime(detune, time)
   }
 
-  fxGain1(gain, time) {
-    this.gain1.gain.setValueAtTime((2 * gain) / 255, time)
-  }
-
-  fxGain2(gain, time) {
-    this.gain2.gain.setValueAtTime((2 * gain) / 255, time)
-  }
-
   fxVibratoSpeed(speed, time) {
-    this.vibrato.frequency.setValueAtTime(speed, time)
+    this.vibratoSpeed.frequency.setValueAtTime((20 * speed) / 255, time)
   }
 
-  fxVibratoGain(gain, time) {
-    this.vibratoGain.gain.setValueAtTime(gain, time)
+  fxVibratoDepth(depth, time) {
+    this.vibratoDepth.gain.setValueAtTime((50 * depth) / 255, time)
   }
 
   fxVolume(volume, time) {
