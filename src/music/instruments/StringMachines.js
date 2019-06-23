@@ -6,13 +6,9 @@ export default class StringMachines extends Instrument {
     this.oscillator1 = this.audioContext.createOscillator()
     this.oscillator1.type = 'sawtooth'
 
-    this.gain1 = this.audioContext.createGain()
-
     this.oscillator2 = this.audioContext.createOscillator()
     this.oscillator2.type = 'sawtooth'
     this.oscillator2.detune.value = -4
-
-    this.gain2 = this.audioContext.createGain()
 
     this.vibratoSpeed = this.audioContext.createOscillator()
     this.vibratoSpeed.type = 'triangle'
@@ -21,6 +17,15 @@ export default class StringMachines extends Instrument {
     this.vibratoDepth = this.audioContext.createGain()
     this.vibratoDepth.gain.value = 2
 
+    this.gain1 = this.audioContext.createGain()
+    this.gain1.gain.value = 0.5
+
+    this.gain2 = this.audioContext.createGain()
+    this.gain2.gain.value = 0.5
+
+    this.envelope = this.audioContext.createGain()
+    this.envelope.gain.value = 0
+
     this.volume = this.audioContext.createGain()
     this.volume.gain.value = 1
 
@@ -28,8 +33,9 @@ export default class StringMachines extends Instrument {
     this.vibratoDepth.connect(this.oscillator1.frequency)
     this.oscillator1.connect(this.gain1)
     this.oscillator2.connect(this.gain2)
-    this.gain1.connect(this.volume)
-    this.gain2.connect(this.volume)
+    this.gain1.connect(this.envelope)
+    this.gain2.connect(this.envelope)
+    this.envelope.connect(this.volume)
     this.volume.connect(this.destination)
 
     this.oscillator1.start()
@@ -46,13 +52,13 @@ export default class StringMachines extends Instrument {
   noteOn(noteFrequency, time) {
     this.oscillator1.frequency.setValueAtTime(noteFrequency, time)
     this.oscillator2.frequency.setValueAtTime(noteFrequency, time)
-    this.gain1.gain.setValueAtTime(0.5, time)
-    this.gain2.gain.setValueAtTime(0.5, time)
+    this.envelope.gain.cancelAndHoldAtTime(time)
+    this.envelope.gain.linearRampToValueAtTime(1, time + 0.1)
   }
 
   noteOff(time) {
-    this.gain1.gain.setValueAtTime(0, time)
-    this.gain2.gain.setValueAtTime(0, time)
+    this.envelope.gain.cancelAndHoldAtTime(time)
+    this.envelope.gain.linearRampToValueAtTime(0, time + 0.15)
   }
 
   fxPitch(pitch, time) {
