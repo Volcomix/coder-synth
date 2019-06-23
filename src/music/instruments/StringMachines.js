@@ -76,10 +76,6 @@ export default class StringMachines extends Instrument {
   }
 
   fxVolume(volume, time) {
-    this.volume.gain.setValueAtTime(volume / 255, time)
-  }
-
-  fxSlideVolumeTo(volume, time) {
     this.volume.gain.linearRampToValueAtTime(volume / 255, time)
   }
 }
