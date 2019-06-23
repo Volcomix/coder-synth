@@ -31,7 +31,7 @@ export default class Instrument {
   playEffects(effects, noteIndex, noteTime) {
     Object.entries(effects).forEach(([effectName, effectValues]) => {
       const effectValue = effectValues[noteIndex]
-      if (effectValue !== '---') {
+      if (effectValue && effectValue !== '---') {
         this.setEffect(effectName, parseInt(effectValue), noteTime)
       }
     })
