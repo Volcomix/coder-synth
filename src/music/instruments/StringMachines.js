@@ -10,16 +10,16 @@ export default class StringMachines extends Instrument {
 
     this.oscillator2 = this.audioContext.createOscillator()
     this.oscillator2.type = 'sawtooth'
-    this.oscillator2.detune.value = 5
+    this.oscillator2.detune.value = -4
 
     this.gain2 = this.audioContext.createGain()
 
     this.vibratoSpeed = this.audioContext.createOscillator()
     this.vibratoSpeed.type = 'triangle'
-    this.vibratoSpeed.frequency.value = 4.08
+    this.vibratoSpeed.frequency.value = 3
 
     this.vibratoDepth = this.audioContext.createGain()
-    this.vibratoDepth.gain.value = 2.74
+    this.vibratoDepth.gain.value = 2
 
     this.volume = this.audioContext.createGain()
     this.volume.gain.value = 1
@@ -64,18 +64,22 @@ export default class StringMachines extends Instrument {
   }
 
   fxDetune(detune, time) {
-    this.oscillator2.detune.setValueAtTime(detune, time)
+    this.oscillator2.detune.setValueAtTime(detune - 128, time)
   }
 
   fxVibratoSpeed(speed, time) {
-    this.vibratoSpeed.frequency.setValueAtTime((20 * speed) / 255, time)
+    this.vibratoSpeed.frequency.setValueAtTime(speed, time)
   }
 
   fxVibratoDepth(depth, time) {
-    this.vibratoDepth.gain.setValueAtTime((50 * depth) / 255, time)
+    this.vibratoDepth.gain.setValueAtTime(depth, time)
   }
 
   fxVolume(volume, time) {
     this.volume.gain.setValueAtTime(volume / 255, time)
+  }
+
+  fxSlideVolumeTo(volume, time) {
+    this.volume.gain.linearRampToValueAtTime(volume / 255, time)
   }
 }
