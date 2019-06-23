@@ -23,6 +23,11 @@ export default class StringMachines extends Instrument {
     this.gain2 = this.audioContext.createGain()
     this.gain2.gain.value = 0.5
 
+    this.lpf = this.audioContext.createBiquadFilter()
+    this.lpf.type = 'lowpass'
+    this.lpf.frequency.value = Object.values(noteFrequencies)[90]
+    this.lpf.Q.value = (100 * 45) / 255
+
     this.envelope = this.audioContext.createGain()
     this.envelope.gain.value = 0
 
@@ -33,8 +38,9 @@ export default class StringMachines extends Instrument {
     this.vibratoDepth.connect(this.oscillator1.frequency)
     this.oscillator1.connect(this.gain1)
     this.oscillator2.connect(this.gain2)
-    this.gain1.connect(this.envelope)
-    this.gain2.connect(this.envelope)
+    this.gain1.connect(this.lpf)
+    this.gain2.connect(this.lpf)
+    this.lpf.connect(this.envelope)
     this.envelope.connect(this.volume)
     this.volume.connect(this.destination)
 
@@ -79,6 +85,17 @@ export default class StringMachines extends Instrument {
 
   fxVibratoDepth(depth, time) {
     this.vibratoDepth.gain.setValueAtTime(depth, time)
+  }
+
+  fxLpfPitch(pitch, time) {
+    const frequency = Object.values(noteFrequencies)[pitch]
+    if (frequency !== undefined) {
+      this.lpf.frequency.setValueAtTime(frequency, time)
+    }
+  }
+
+  fxLpfQ(Q, time) {
+    this.lpf.Q.setValueAtTime((100 * Q) / 255, time)
   }
 
   fxVolume(volume, time) {
