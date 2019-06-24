@@ -12,10 +12,10 @@ export default class StringMachines extends Instrument {
 
     this.vibratoSpeed = this.audioContext.createOscillator()
     this.vibratoSpeed.type = 'triangle'
-    this.vibratoSpeed.frequency.value = 3
+    this.vibratoSpeed.frequency.value = 7
 
     this.vibratoDepth = this.audioContext.createGain()
-    this.vibratoDepth.gain.value = 2
+    this.vibratoDepth.gain.value = 6
 
     this.gain1 = this.audioContext.createGain()
     this.gain1.gain.value = 0.5
@@ -25,8 +25,8 @@ export default class StringMachines extends Instrument {
 
     this.lpf = this.audioContext.createBiquadFilter()
     this.lpf.type = 'lowpass'
-    this.lpf.frequency.value = Object.values(noteFrequencies)[90]
-    this.lpf.Q.value = (100 * 45) / 255
+    this.lpf.frequency.value = Object.values(noteFrequencies)[96]
+    this.lpf.Q.value = (100 * 40) / 255
 
     this.envelope = this.audioContext.createGain()
     this.envelope.gain.value = 0

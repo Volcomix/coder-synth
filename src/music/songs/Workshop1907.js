@@ -8,15 +8,15 @@ export default class Workshop1907 extends Song {
     {
       instrument: new StringMachines(this.audioContext, this.destination),
       notes: `
-        G-3 --- C-3 --- D#3 F-3
-        G-3 --- C-3 --- D#3 F-3
-        G-3 --- C-3 --- D#3 F-3
-        G-3 --- C-3 --- D#3 F-3
+        G-4 --- C-4 --- D#4 F-4
+        G-4 --- C-4 --- D#4 F-4
+        G-4 --- C-4 --- D#4 F-4
+        G-4 --- C-4 --- D#4 F-4
 
-        G-3 --- C-3 --- E-3 F-3
-        G-3 --- C-3 --- E-3 F-3
-        G-3 --- C-3 --- E-3 F-3
-        G-3 --- C-3 --- E-3 F-3
+        G-4 --- C-4 --- E-4 F-4
+        G-4 --- C-4 --- E-4 F-4
+        G-4 --- C-4 --- E-4 F-4
+        G-4 --- C-4 --- E-4 F-4
 
         G-4 --- --- --- --- ---
         C-4 --- --- --- --- ---
