@@ -3,12 +3,18 @@ import noteFrequencies from '../common/noteFrequencies'
 
 export default class StringMachines extends Instrument {
   start() {
-    this.oscillator1 = this.audioContext.createOscillator()
-    this.oscillator1.type = 'sawtooth'
+    this.osc1 = this.audioContext.createOscillator()
+    this.osc1.type = 'sawtooth'
 
-    this.oscillator2 = this.audioContext.createOscillator()
-    this.oscillator2.type = 'sawtooth'
-    this.oscillator2.detune.value = -4
+    this.osc2 = this.audioContext.createOscillator()
+    this.osc2.type = 'sawtooth'
+    this.osc2.detune.value = -4
+
+    this.gain1 = this.audioContext.createGain()
+    this.gain1.gain.value = 0.5
+
+    this.gain2 = this.audioContext.createGain()
+    this.gain2.gain.value = 0.5
 
     this.vibratoSpeed = this.audioContext.createOscillator()
     this.vibratoSpeed.type = 'triangle'
@@ -17,16 +23,10 @@ export default class StringMachines extends Instrument {
     this.vibratoDepth = this.audioContext.createGain()
     this.vibratoDepth.gain.value = 6
 
-    this.gain1 = this.audioContext.createGain()
-    this.gain1.gain.value = 0.5
-
-    this.gain2 = this.audioContext.createGain()
-    this.gain2.gain.value = 0.5
-
     this.lpf = this.audioContext.createBiquadFilter()
     this.lpf.type = 'lowpass'
     this.lpf.frequency.value = Object.values(noteFrequencies)[96]
-    this.lpf.Q.value = (100 * 40) / 255
+    this.lpf.Q.value = (100 * 15) / 255
 
     this.envelope = this.audioContext.createGain()
     this.envelope.gain.value = 0
@@ -34,30 +34,30 @@ export default class StringMachines extends Instrument {
     this.volume = this.audioContext.createGain()
     this.volume.gain.value = 1
 
-    this.vibratoSpeed.connect(this.vibratoDepth)
-    this.vibratoDepth.connect(this.oscillator1.frequency)
-    this.oscillator1.connect(this.gain1)
-    this.oscillator2.connect(this.gain2)
+    this.osc1.connect(this.gain1)
+    this.osc2.connect(this.gain2)
     this.gain1.connect(this.lpf)
     this.gain2.connect(this.lpf)
+    this.vibratoSpeed.connect(this.vibratoDepth)
+    this.vibratoDepth.connect(this.osc1.frequency)
     this.lpf.connect(this.envelope)
     this.envelope.connect(this.volume)
     this.volume.connect(this.destination)
 
-    this.oscillator1.start()
-    this.oscillator2.start()
+    this.osc1.start()
+    this.osc2.start()
     this.vibratoSpeed.start()
   }
 
   stop() {
-    this.oscillator1.stop()
-    this.oscillator2.stop()
+    this.osc1.stop()
+    this.osc2.stop()
     this.vibratoSpeed.stop()
   }
 
   noteOn(noteFrequency, time) {
-    this.oscillator1.frequency.setValueAtTime(noteFrequency, time)
-    this.oscillator2.frequency.setValueAtTime(noteFrequency, time)
+    this.osc1.frequency.setValueAtTime(noteFrequency, time)
+    this.osc2.frequency.setValueAtTime(noteFrequency, time)
     this.envelope.gain.cancelAndHoldAtTime(time)
     this.envelope.gain.linearRampToValueAtTime(1, time + 0.1)
   }
@@ -70,13 +70,13 @@ export default class StringMachines extends Instrument {
   fxPitch(pitch, time) {
     const frequency = Object.values(noteFrequencies)[pitch]
     if (frequency !== undefined) {
-      this.oscillator1.frequency.setValueAtTime(frequency, time)
-      this.oscillator2.frequency.setValueAtTime(frequency, time)
+      this.osc1.frequency.setValueAtTime(frequency, time)
+      this.osc2.frequency.setValueAtTime(frequency, time)
     }
   }
 
   fxDetune(detune, time) {
-    this.oscillator2.detune.setValueAtTime(detune - 128, time)
+    this.osc2.detune.setValueAtTime(detune - 128, time)
   }
 
   fxVibratoSpeed(speed, time) {
