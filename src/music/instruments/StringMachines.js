@@ -2,6 +2,8 @@ import Instrument from '../common/Instrument'
 import noteFrequencies from '../common/noteFrequencies'
 
 export default class StringMachines extends Instrument {
+  random = Float32Array.from({ length: 256 }, () => Math.random() * 2 - 1)
+
   start() {
     this.osc1 = this.audioContext.createOscillator()
     this.osc1.type = 'sawtooth'
@@ -17,11 +19,14 @@ export default class StringMachines extends Instrument {
     this.gain2.gain.value = 0.5
 
     this.vibratoSpeed = this.audioContext.createOscillator()
-    this.vibratoSpeed.type = 'triangle'
-    this.vibratoSpeed.frequency.value = 7
+    this.vibratoSpeed.type = 'sawtooth'
+    this.vibratoSpeed.frequency.value = 20 / 255
+
+    this.vibratoShaper = this.audioContext.createWaveShaper()
+    this.vibratoShaper.curve = this.random
 
     this.vibratoDepth = this.audioContext.createGain()
-    this.vibratoDepth.gain.value = 6
+    this.vibratoDepth.gain.value = 4
 
     this.lpf = this.audioContext.createBiquadFilter()
     this.lpf.type = 'lowpass'
@@ -38,7 +43,8 @@ export default class StringMachines extends Instrument {
     this.osc2.connect(this.gain2)
     this.gain1.connect(this.lpf)
     this.gain2.connect(this.lpf)
-    this.vibratoSpeed.connect(this.vibratoDepth)
+    this.vibratoSpeed.connect(this.vibratoShaper)
+    this.vibratoShaper.connect(this.vibratoDepth)
     this.vibratoDepth.connect(this.osc1.frequency)
     this.lpf.connect(this.envelope)
     this.envelope.connect(this.volume)
@@ -80,7 +86,7 @@ export default class StringMachines extends Instrument {
   }
 
   fxVibratoSpeed(speed, time) {
-    this.vibratoSpeed.frequency.setValueAtTime(speed, time)
+    this.vibratoSpeed.frequency.setValueAtTime(speed / 255, time)
   }
 
   fxVibratoDepth(depth, time) {
