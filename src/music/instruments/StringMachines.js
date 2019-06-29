@@ -2,14 +2,9 @@ import Instrument from '../common/Instrument'
 import noteFrequencies from '../common/noteFrequencies'
 
 export default class StringMachines extends Instrument {
-  oneCurve = new Float32Array([1, 1])
   pulseCurve = Float32Array.from({ length: 256 }, (_, i) => (i < 128 ? -1 : 1))
 
   start() {
-    this.lfo = this.audioContext.createOscillator()
-    this.lfo.type = 'triangle'
-    this.lfo.frequency.value = 6
-
     this.osc = this.audioContext.createOscillator()
     this.osc.type = 'sawtooth'
 
@@ -17,14 +12,12 @@ export default class StringMachines extends Instrument {
     this.oscDetuned.type = 'sawtooth'
     this.oscDetuned.detune.value = -4
 
-    this.one = this.audioContext.createWaveShaper()
-    this.one.curve = this.oneCurve
+    this.pulseWidth = this.audioContext.createConstantSource()
+    this.pulseWidth.offset.value = 0.275
 
-    this.pulse = this.audioContext.createWaveShaper()
-    this.pulse.curve = this.pulseCurve
-
-    this.pulseDetuned = this.audioContext.createWaveShaper()
-    this.pulseDetuned.curve = this.pulseCurve
+    this.lfo = this.audioContext.createOscillator()
+    this.lfo.type = 'triangle'
+    this.lfo.frequency.value = 6
 
     this.oscMod = this.audioContext.createGain()
     this.oscMod.gain.value = 4
@@ -32,13 +25,16 @@ export default class StringMachines extends Instrument {
     this.pwmMod = this.audioContext.createGain()
     this.pwmMod.gain.value = 0.45
 
-    this.pulseWidth = this.audioContext.createGain()
-    this.pulseWidth.gain.value = 0.275
+    this.pulse = this.audioContext.createWaveShaper()
+    this.pulse.curve = this.pulseCurve
+
+    this.pulseDetuned = this.audioContext.createWaveShaper()
+    this.pulseDetuned.curve = this.pulseCurve
 
     this.lpf = this.audioContext.createBiquadFilter()
     this.lpf.type = 'lowpass'
     this.lpf.frequency.value = (8000 * 170) / 255
-    this.lpf.Q.value = (50 * 32) / 255
+    this.lpf.Q.value = (50 * 15) / 255
 
     this.envelope = this.audioContext.createGain()
     this.envelope.gain.value = 0
@@ -46,10 +42,8 @@ export default class StringMachines extends Instrument {
     this.volume = this.audioContext.createGain()
     this.volume.gain.value = 1
 
-    this.osc.connect(this.one)
-    this.one.connect(this.pulseWidth)
     this.lfo.connect(this.pwmMod)
-    this.pwmMod.connect(this.pulseWidth.gain)
+    this.pwmMod.connect(this.pulseWidth.offset)
 
     this.lfo.connect(this.oscMod)
     this.oscMod.connect(this.osc.frequency)
@@ -60,24 +54,26 @@ export default class StringMachines extends Instrument {
     this.oscDetuned.connect(this.pulseDetuned)
     this.pulseWidth.connect(this.pulseDetuned)
 
-    this.pulse.connect(this.lpf)
     this.osc.connect(this.lpf)
-    this.pulseDetuned.connect(this.lpf)
+    this.pulse.connect(this.lpf)
     this.oscDetuned.connect(this.lpf)
+    this.pulseDetuned.connect(this.lpf)
 
     this.lpf.connect(this.envelope)
     this.envelope.connect(this.volume)
     this.volume.connect(this.destination)
 
-    this.lfo.start()
     this.osc.start()
     this.oscDetuned.start()
+    this.pulseWidth.start()
+    this.lfo.start()
   }
 
   stop() {
-    this.lfo.stop()
     this.osc.stop()
     this.oscDetuned.stop()
+    this.pulseWidth.stop()
+    this.lfo.stop()
   }
 
   noteOn(noteFrequency, time) {
@@ -104,6 +100,10 @@ export default class StringMachines extends Instrument {
     this.oscDetuned.detune.setValueAtTime(detune - 128, time)
   }
 
+  fxPulseWidth(width, time) {
+    this.pulseWidth.offset.setValueAtTime((2 * width) / 255 - 1, time)
+  }
+
   fxLfoRate(rate, time) {
     this.lfo.frequency.setValueAtTime(rate, time)
   }
@@ -114,10 +114,6 @@ export default class StringMachines extends Instrument {
 
   fxPwmMod(mod, time) {
     this.pwmMod.gain.setValueAtTime(mod / 255, time)
-  }
-
-  fxPulseWidth(width, time) {
-    this.pulseWidth.gain.setValueAtTime((2 * width) / 255 - 1, time)
   }
 
   fxLpfFreq(frequency, time) {
