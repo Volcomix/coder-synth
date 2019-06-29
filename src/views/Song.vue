@@ -15,12 +15,12 @@
     </VToolbar>
     <VContent>
       <VLayout fill-height column>
+        <Oscilloscope :key="`${songName}-${track}`" :analyser="analyser" />
         <TrackEffects
           v-if="instrument"
           :instrument="instrument"
           :isPlaying="isPlaying"
         />
-        <Oscilloscope :key="`${songName}-${track}`" :analyser="analyser" />
       </VLayout>
     </VContent>
   </VApp>

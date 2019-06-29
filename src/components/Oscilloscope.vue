@@ -66,7 +66,7 @@ export default {
 
 <style scoped>
 .oscilloscope {
-  min-height: 120px;
+  min-height: 80px;
 }
 .canvas {
   position: absolute;
