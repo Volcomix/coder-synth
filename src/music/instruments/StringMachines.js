@@ -14,18 +14,18 @@ export default class StringMachines extends Instrument {
     this.oscDetuned = this.audioContext.createOscillator()
     this.oscDetuned.type = 'sawtooth'
     this.oscDetuned.frequency.value = 0
-    this.oscDetuned.detune.value = -4
+    this.oscDetuned.detune.value = -1204
 
     this.pulseWidth = this.audioContext.createConstantSource()
     this.pulseWidth.offset.value = 0.275
 
     this.lfo1 = this.audioContext.createOscillator()
     this.lfo1.type = 'triangle'
-    this.lfo1.frequency.value = 6
+    this.lfo1.frequency.value = 5
 
     this.lfo2 = this.audioContext.createOscillator()
     this.lfo2.type = 'triangle'
-    this.lfo2.frequency.value = 5
+    this.lfo2.frequency.value = 6
 
     this.oscMod = this.audioContext.createGain()
     this.oscMod.gain.value = 4
@@ -54,7 +54,7 @@ export default class StringMachines extends Instrument {
     this.chorusMod.gain.value = (0.01 * 8) / 255
 
     this.chorusDelay = this.audioContext.createDelay()
-    this.chorusDelay.delayTime.value = 10 / 255
+    this.chorusDelay.delayTime.value = 15 / 255
 
     this.volume = this.audioContext.createGain()
     this.volume.gain.value = 1
@@ -114,11 +114,12 @@ export default class StringMachines extends Instrument {
     if (time > 0) {
       this.envelope.gain.setTargetAtTime(0, time - 0.05, 0.05)
     }
-    this.envelope.gain.setTargetAtTime(0.1, time, 0.3)
+    this.envelope.gain.setValueAtTime(0, time)
+    this.envelope.gain.linearRampToValueAtTime(0.1, time + 0.1)
   }
 
   noteOff(time) {
-    this.envelope.gain.setTargetAtTime(0, time, 0.5)
+    this.envelope.gain.setTargetAtTime(0, time, 0.1)
   }
 
   fxPitch(pitch, time) {
@@ -129,7 +130,7 @@ export default class StringMachines extends Instrument {
   }
 
   fxDetune(detune, time) {
-    this.oscDetuned.detune.setValueAtTime(detune - 128, time)
+    this.oscDetuned.detune.setValueAtTime(detune - 128 - 1200, time)
   }
 
   fxPulseWidth(width, time) {
