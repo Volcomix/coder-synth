@@ -5,11 +5,15 @@ export default class StringMachines extends Instrument {
   pulseCurve = Float32Array.from({ length: 256 }, (_, i) => (i < 128 ? -1 : 1))
 
   start() {
+    this.key = this.audioContext.createConstantSource()
+
     this.osc = this.audioContext.createOscillator()
     this.osc.type = 'sawtooth'
+    this.osc.frequency.value = 0
 
     this.oscDetuned = this.audioContext.createOscillator()
     this.oscDetuned.type = 'sawtooth'
+    this.oscDetuned.frequency.value = 0
     this.oscDetuned.detune.value = -4
 
     this.pulseWidth = this.audioContext.createConstantSource()
@@ -33,14 +37,20 @@ export default class StringMachines extends Instrument {
 
     this.lpf = this.audioContext.createBiquadFilter()
     this.lpf.type = 'lowpass'
-    this.lpf.frequency.value = (8000 * 170) / 255
+    this.lpf.frequency.value = (8000 * 80) / 255
     this.lpf.Q.value = (50 * 15) / 255
+
+    this.lpfKeyFollow = this.audioContext.createGain()
+    this.lpfKeyFollow.gain.value = (10 * 110) / 255
 
     this.envelope = this.audioContext.createGain()
     this.envelope.gain.value = 0
 
     this.volume = this.audioContext.createGain()
     this.volume.gain.value = 1
+
+    this.key.connect(this.osc.frequency)
+    this.key.connect(this.oscDetuned.frequency)
 
     this.lfo.connect(this.pwmMod)
     this.pwmMod.connect(this.pulseWidth.offset)
@@ -59,10 +69,14 @@ export default class StringMachines extends Instrument {
     this.oscDetuned.connect(this.lpf)
     this.pulseDetuned.connect(this.lpf)
 
+    this.key.connect(this.lpfKeyFollow)
+    this.lpfKeyFollow.connect(this.lpf.frequency)
+
     this.lpf.connect(this.envelope)
     this.envelope.connect(this.volume)
     this.volume.connect(this.destination)
 
+    this.key.start()
     this.osc.start()
     this.oscDetuned.start()
     this.pulseWidth.start()
@@ -70,6 +84,7 @@ export default class StringMachines extends Instrument {
   }
 
   stop() {
+    this.key.stop()
     this.osc.stop()
     this.oscDetuned.stop()
     this.pulseWidth.stop()
@@ -77,8 +92,7 @@ export default class StringMachines extends Instrument {
   }
 
   noteOn(noteFrequency, time) {
-    this.osc.frequency.setValueAtTime(noteFrequency, time)
-    this.oscDetuned.frequency.setValueAtTime(noteFrequency, time)
+    this.key.offset.setValueAtTime(noteFrequency, time)
     this.envelope.gain.cancelAndHoldAtTime(time)
     this.envelope.gain.linearRampToValueAtTime(0.25, time + 0.1)
   }
@@ -91,8 +105,7 @@ export default class StringMachines extends Instrument {
   fxPitch(pitch, time) {
     const frequency = Object.values(noteFrequencies)[pitch]
     if (frequency !== undefined) {
-      this.osc.frequency.setValueAtTime(frequency, time)
-      this.oscDetuned.frequency.setValueAtTime(frequency, time)
+      this.key.offset.setValueAtTime(frequency, time)
     }
   }
 
@@ -122,6 +135,10 @@ export default class StringMachines extends Instrument {
 
   fxLpfQ(Q, time) {
     this.lpf.Q.setValueAtTime((50 * Q) / 255, time)
+  }
+
+  fxLpfKeyFollow(amount, time) {
+    this.lpfKeyFollow.gain.setValueAtTime((10 * amount) / 255, time)
   }
 
   fxVolume(volume, time) {
