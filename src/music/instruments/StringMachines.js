@@ -2,9 +2,8 @@ import Instrument from '../common/Instrument'
 import noteFrequencies from '../common/noteFrequencies'
 
 export default class StringMachines extends Instrument {
-  randomCurve = Float32Array.from({ length: 256 }, () => Math.random() * 2 - 1)
-  pulseCurve = Float32Array.from({ length: 256 }, (_, i) => (i < 128 ? -1 : 1))
   oneCurve = new Float32Array([1, 1])
+  pulseCurve = Float32Array.from({ length: 256 }, (_, i) => (i < 128 ? -1 : 1))
 
   start() {
     this.lfo = this.audioContext.createOscillator()
@@ -36,25 +35,10 @@ export default class StringMachines extends Instrument {
     this.pulseWidth = this.audioContext.createGain()
     this.pulseWidth.gain.value = 0.275
 
-    this.gain1 = this.audioContext.createGain()
-    this.gain1.gain.value = 0.25
-
-    this.gain2 = this.audioContext.createGain()
-    this.gain2.gain.value = 0.25
-
-    this.gain3 = this.audioContext.createGain()
-    this.gain3.gain.value = 0.25
-
-    this.gain4 = this.audioContext.createGain()
-    this.gain4.gain.value = 0.25
-
-    // this.vibratoShaper = this.audioContext.createWaveShaper()
-    // this.vibratoShaper.curve = this.random
-
     this.lpf = this.audioContext.createBiquadFilter()
     this.lpf.type = 'lowpass'
-    this.lpf.frequency.value = Object.values(noteFrequencies)[96]
-    this.lpf.Q.value = (100 * 10) / 255
+    this.lpf.frequency.value = (8000 * 170) / 255
+    this.lpf.Q.value = (50 * 32) / 255
 
     this.envelope = this.audioContext.createGain()
     this.envelope.gain.value = 0
@@ -76,15 +60,10 @@ export default class StringMachines extends Instrument {
     this.oscDetuned.connect(this.pulseDetuned)
     this.pulseWidth.connect(this.pulseDetuned)
 
-    this.pulse.connect(this.gain1)
-    this.osc.connect(this.gain2)
-    this.pulseDetuned.connect(this.gain3)
-    this.oscDetuned.connect(this.gain4)
-
-    this.gain1.connect(this.lpf)
-    this.gain2.connect(this.lpf)
-    this.gain3.connect(this.lpf)
-    this.gain4.connect(this.lpf)
+    this.pulse.connect(this.lpf)
+    this.osc.connect(this.lpf)
+    this.pulseDetuned.connect(this.lpf)
+    this.oscDetuned.connect(this.lpf)
 
     this.lpf.connect(this.envelope)
     this.envelope.connect(this.volume)
@@ -105,7 +84,7 @@ export default class StringMachines extends Instrument {
     this.osc.frequency.setValueAtTime(noteFrequency, time)
     this.oscDetuned.frequency.setValueAtTime(noteFrequency, time)
     this.envelope.gain.cancelAndHoldAtTime(time)
-    this.envelope.gain.linearRampToValueAtTime(1, time + 0.1)
+    this.envelope.gain.linearRampToValueAtTime(0.25, time + 0.1)
   }
 
   noteOff(time) {
@@ -141,15 +120,12 @@ export default class StringMachines extends Instrument {
     this.pulseWidth.gain.setValueAtTime((2 * width) / 255 - 1, time)
   }
 
-  fxLpfPitch(pitch, time) {
-    const frequency = Object.values(noteFrequencies)[pitch]
-    if (frequency !== undefined) {
-      this.lpf.frequency.setValueAtTime(frequency, time)
-    }
+  fxLpfFreq(frequency, time) {
+    this.lpf.frequency.setValueAtTime((8000 * frequency) / 255, time)
   }
 
   fxLpfQ(Q, time) {
-    this.lpf.Q.setValueAtTime((100 * Q) / 255, time)
+    this.lpf.Q.setValueAtTime((50 * Q) / 255, time)
   }
 
   fxVolume(volume, time) {
