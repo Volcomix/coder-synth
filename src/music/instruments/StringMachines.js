@@ -19,9 +19,13 @@ export default class StringMachines extends Instrument {
     this.pulseWidth = this.audioContext.createConstantSource()
     this.pulseWidth.offset.value = 0.275
 
-    this.lfo = this.audioContext.createOscillator()
-    this.lfo.type = 'triangle'
-    this.lfo.frequency.value = 6
+    this.lfo1 = this.audioContext.createOscillator()
+    this.lfo1.type = 'triangle'
+    this.lfo1.frequency.value = 6
+
+    this.lfo2 = this.audioContext.createOscillator()
+    this.lfo2.type = 'triangle'
+    this.lfo2.frequency.value = 5
 
     this.oscMod = this.audioContext.createGain()
     this.oscMod.gain.value = 4
@@ -46,17 +50,26 @@ export default class StringMachines extends Instrument {
     this.envelope = this.audioContext.createGain()
     this.envelope.gain.value = 0
 
+    this.chorusMod = this.audioContext.createGain()
+    this.chorusMod.gain.value = (0.01 * 8) / 255
+
+    this.chorusDelay = this.audioContext.createDelay()
+    this.chorusDelay.delayTime.value = 10 / 255
+
     this.volume = this.audioContext.createGain()
     this.volume.gain.value = 1
 
     this.key.connect(this.osc.frequency)
     this.key.connect(this.oscDetuned.frequency)
 
-    this.lfo.connect(this.pwmMod)
+    this.lfo1.connect(this.pwmMod)
     this.pwmMod.connect(this.pulseWidth.offset)
 
-    this.lfo.connect(this.oscMod)
+    this.lfo1.connect(this.oscMod)
     this.oscMod.connect(this.osc.frequency)
+
+    this.lfo2.connect(this.chorusMod)
+    this.chorusMod.connect(this.chorusDelay.delayTime)
 
     this.osc.connect(this.pulse)
     this.pulseWidth.connect(this.pulse)
@@ -71,16 +84,20 @@ export default class StringMachines extends Instrument {
 
     this.key.connect(this.lpfKeyFollow)
     this.lpfKeyFollow.connect(this.lpf.frequency)
-
     this.lpf.connect(this.envelope)
+
+    this.envelope.connect(this.chorusDelay)
+    this.chorusDelay.connect(this.volume)
     this.envelope.connect(this.volume)
+
     this.volume.connect(this.destination)
 
     this.key.start()
     this.osc.start()
     this.oscDetuned.start()
     this.pulseWidth.start()
-    this.lfo.start()
+    this.lfo1.start()
+    this.lfo2.start()
   }
 
   stop() {
@@ -88,13 +105,16 @@ export default class StringMachines extends Instrument {
     this.osc.stop()
     this.oscDetuned.stop()
     this.pulseWidth.stop()
-    this.lfo.stop()
+    this.lfo1.stop()
+    this.lfo2.stop()
   }
 
   noteOn(noteFrequency, time) {
     this.key.offset.setValueAtTime(noteFrequency, time)
-    this.envelope.gain.setTargetAtTime(0, time - 0.05, 0.05)
-    this.envelope.gain.setTargetAtTime(0.25, time, 0.3)
+    if (time > 0) {
+      this.envelope.gain.setTargetAtTime(0, time - 0.05, 0.05)
+    }
+    this.envelope.gain.setTargetAtTime(0.1, time, 0.3)
   }
 
   noteOff(time) {
@@ -116,8 +136,12 @@ export default class StringMachines extends Instrument {
     this.pulseWidth.offset.setValueAtTime((2 * width) / 255 - 1, time)
   }
 
-  fxLfoRate(rate, time) {
-    this.lfo.frequency.setValueAtTime(rate, time)
+  fxLfo1Rate(rate, time) {
+    this.lfo1.frequency.setValueAtTime(rate, time)
+  }
+
+  fxLfo2Rate(rate, time) {
+    this.lfo2.frequency.setValueAtTime(rate, time)
   }
 
   fxOscMod(mod, time) {
@@ -138,6 +162,14 @@ export default class StringMachines extends Instrument {
 
   fxLpfKeyFollow(amount, time) {
     this.lpfKeyFollow.gain.setValueAtTime((10 * amount) / 255, time)
+  }
+
+  fxChorusMod(mod, time) {
+    this.chorusMod.gain.setValueAtTime((0.01 * mod) / 255, time)
+  }
+
+  fxChorusDelay(delay, time) {
+    this.chorusDelay.delayTime.setValueAtTime(delay / 255, time)
   }
 
   fxVolume(volume, time) {
