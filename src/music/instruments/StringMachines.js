@@ -93,13 +93,12 @@ export default class StringMachines extends Instrument {
 
   noteOn(noteFrequency, time) {
     this.key.offset.setValueAtTime(noteFrequency, time)
-    this.envelope.gain.cancelAndHoldAtTime(time)
-    this.envelope.gain.linearRampToValueAtTime(0.25, time + 0.1)
+    this.envelope.gain.setTargetAtTime(0, time - 0.05, 0.05)
+    this.envelope.gain.setTargetAtTime(0.25, time, 0.3)
   }
 
   noteOff(time) {
-    this.envelope.gain.cancelAndHoldAtTime(time)
-    this.envelope.gain.linearRampToValueAtTime(0, time + 0.15)
+    this.envelope.gain.setTargetAtTime(0, time, 0.5)
   }
 
   fxPitch(pitch, time) {
