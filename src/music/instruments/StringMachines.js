@@ -9,7 +9,7 @@ export default class StringMachines extends Instrument {
   start() {
     this.lfo = this.audioContext.createOscillator()
     this.lfo.type = 'triangle'
-    this.lfo.frequency.value = 4
+    this.lfo.frequency.value = 6
 
     this.osc = this.audioContext.createOscillator()
     this.osc.type = 'sawtooth'
@@ -31,10 +31,10 @@ export default class StringMachines extends Instrument {
     this.oscMod.gain.value = 4
 
     this.pwmMod = this.audioContext.createGain()
-    this.pwmMod.gain.value = 0.3
+    this.pwmMod.gain.value = 0.45
 
     this.pulseWidth = this.audioContext.createGain()
-    this.pulseWidth.gain.value = 0.5
+    this.pulseWidth.gain.value = 0.275
 
     this.gain1 = this.audioContext.createGain()
     this.gain1.gain.value = 0.25
@@ -54,7 +54,7 @@ export default class StringMachines extends Instrument {
     this.lpf = this.audioContext.createBiquadFilter()
     this.lpf.type = 'lowpass'
     this.lpf.frequency.value = Object.values(noteFrequencies)[96]
-    this.lpf.Q.value = (100 * 15) / 255
+    this.lpf.Q.value = (100 * 10) / 255
 
     this.envelope = this.audioContext.createGain()
     this.envelope.gain.value = 0
@@ -65,7 +65,7 @@ export default class StringMachines extends Instrument {
     this.osc.connect(this.one)
     this.one.connect(this.pulseWidth)
     this.lfo.connect(this.pwmMod)
-    this.pwmMod.connect(this.pulseWidth)
+    this.pwmMod.connect(this.pulseWidth.gain)
 
     this.lfo.connect(this.oscMod)
     this.oscMod.connect(this.osc.frequency)
@@ -138,7 +138,7 @@ export default class StringMachines extends Instrument {
   }
 
   fxPulseWidth(width, time) {
-    this.pulseWidth.gain.setValueAtTime(width / 255, time)
+    this.pulseWidth.gain.setValueAtTime((2 * width) / 255 - 1, time)
   }
 
   fxLpfPitch(pitch, time) {

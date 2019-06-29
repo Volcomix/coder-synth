@@ -1,5 +1,5 @@
 <template>
-  <VFlex ref="oscilloscope" my-3 v-resize="resize">
+  <VFlex ref="oscilloscope" class="oscilloscope" my-3 v-resize="resize">
     <canvas ref="canvas" class="canvas" :width="width" :height="height" />
   </VFlex>
 </template>
@@ -65,6 +65,9 @@ export default {
 </script>
 
 <style scoped>
+.oscilloscope {
+  min-height: 120px;
+}
 .canvas {
   position: absolute;
 }
