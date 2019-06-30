@@ -1,5 +1,5 @@
-import Instrument from '../common/Instrument'
-import noteFrequencies from '../common/noteFrequencies'
+import Instrument from '../../common/Instrument'
+import noteFrequencies from '../../common/noteFrequencies'
 
 export default class StringMachines extends Instrument {
   pulseCurve = Float32Array.from({ length: 256 }, (_, i) => (i < 128 ? -1 : 1))

@@ -1,21 +1,75 @@
 import Song from '../common/Song'
-import Oscillator from '../instruments/demo/Oscillator'
-import Gain from '../instruments/demo/Gain'
-import noteFrequencies from '../common/noteFrequencies'
+import StringMachines from '../instruments/demo/StringMachines'
 
 export default class Demo extends Song {
-  tempo = 120
+  tempo = 168
   notesPerBeat = 2
   tracks = [
     {
-      instrument: new Oscillator(this.audioContext, this.destination),
-      notes: 'C-4',
-    },
-    {
-      instrument: new Gain(this.audioContext, this.destination),
-      notes: Object.keys(noteFrequencies)[47],
+      instrument: new StringMachines(this.audioContext, this.destination),
+      notes: `
+        G-5 --- C-5 --- D#5 F-5
+        G-5 --- C-5 --- D#5 F-5
+        G-5 --- C-5 --- D#5 F-5
+        G-5 --- C-5 --- D#5 F-5
+
+        G-5 --- C-5 --- E-5 F-5
+        G-5 --- C-5 --- E-5 F-5
+        G-5 --- C-5 --- E-5 F-5
+        G-5 --- C-5 --- E-5 F-5
+
+        G-5 --- --- --- --- ---
+        C-5 --- --- --- --- ---
+        D#5 F-5 G-5 --- --- ---
+        C-5 --- --- --- D#5 F-5
+
+        D-5 --- G-4 --- A#4 C-5
+        D-5 --- G-4 --- A#4 C-5
+        D-5 --- G-4 --- A#4 C-5
+        D-5 --- G-4 --- A#4 ---
+
+        F-5 --- --- --- --- ---
+        A#4 --- --- --- --- ---
+        D#5 D-5 F-5 --- --- ---
+        A#4 --- --- --- D#5 D-5
+
+        C-5 --- --- --- --- ---
+        --- --- --- --- --- ---
+        OFF --- --- --- --- ---
+        --- --- --- --- --- ---
+      `,
       effects: {
-        detune: '079',
+        volume: `
+        008 --- --- --- --- ---
+        --- --- --- --- --- ---
+        --- --- --- --- --- ---
+        --- --- --- --- --- ---
+
+        --- --- --- --- --- ---
+        --- --- --- --- --- ---
+        --- --- --- --- --- ---
+        --- --- --- --- --- ---
+
+        128 --- --- --- --- ---
+        --- --- --- --- --- ---
+        --- --- --- --- --- ---
+        --- --- --- --- --- ---
+
+        128 200 128 --- --- ---
+        128 200 128 --- --- ---
+        128 200 128 --- --- ---
+        128 200 128 --- --- ---
+
+        --- --- --- --- --- ---
+        --- --- --- --- --- ---
+        --- --- --- --- --- ---
+        --- --- --- --- --- ---
+
+        128 200 128 --- --- ---
+        --- --- --- --- --- ---
+        --- --- --- --- --- ---
+        --- --- --- --- --- ---
+        `,
       },
     },
   ]
