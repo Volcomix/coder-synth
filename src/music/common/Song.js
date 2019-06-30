@@ -42,6 +42,6 @@ export default class Song {
   }
 
   parseCommands(commands) {
-    return commands.trim().split(/\s+/)
+    return commands ? commands.trim().split(/\s+/) : []
   }
 }

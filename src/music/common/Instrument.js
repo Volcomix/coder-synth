@@ -12,7 +12,6 @@ export default class Instrument {
 
   play(notes, effects, timePerNote) {
     this.start()
-    this.noteOff(0)
     let noteTime = this.audioContext.currentTime
     for (let noteIndex = 0; noteIndex < notes.length; noteIndex++) {
       const noteName = notes[noteIndex]
