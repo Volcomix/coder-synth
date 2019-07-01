@@ -8,7 +8,6 @@ export default class Demo extends Song {
   tracks = [
     {
       instrument: new Oscillator(this.audioContext, this.destination),
-      notes: '',
     },
     {
       instrument: new StringMachines(this.audioContext, this.destination),
