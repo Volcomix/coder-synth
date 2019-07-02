@@ -1,7 +1,6 @@
 import Song from '../common/Song'
 import StringMachines from '../instruments/demo/StringMachines'
 import Oscillator from '../instruments/demo/Oscillator'
-import OscillatorSquare from '../instruments/demo/OscillatorSquare'
 
 export default class Demo extends Song {
   tempo = 168
@@ -11,7 +10,11 @@ export default class Demo extends Song {
       instrument: new Oscillator(this.audioContext, this.destination),
     },
     {
-      instrument: new OscillatorSquare(this.audioContext, this.destination),
+      instrument: new Oscillator(this.audioContext, this.destination),
+      notes: `
+        C-4 --- E-4 --- F#4 --- G-4 ---
+        --- --- --- --- --- --- --- OFF
+      `,
     },
     {
       instrument: new StringMachines(this.audioContext, this.destination),
