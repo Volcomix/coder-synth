@@ -15,7 +15,7 @@
       </VListTile>
       <VListTile
         v-for="(instrumentName, index) in instrumentNames"
-        :key="instrumentName"
+        :key="index"
         :to="{ params: { track: index + 1 } }"
       >
         <VListTileTitle>
