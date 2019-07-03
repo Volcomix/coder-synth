@@ -43,14 +43,14 @@ export default {
       requestAnimationFrame(this.draw)
       this.analyser.getByteTimeDomainData(this.dataArray)
       this.context.clearRect(0, 0, this.width, this.height)
-      this.context.lineWidth = 1
+      this.context.lineWidth = 2
       this.context.strokeStyle = this.$vuetify.theme.primary
       this.context.beginPath()
       const sliceWidth = (this.width * 1) / this.bufferLength
       let x = 0
       for (let i = 0; i < this.bufferLength; i++) {
         const v = this.dataArray[i] / 128
-        const y = (v * this.height) / 2
+        const y = 1 + v * (this.height / 2 - 1)
         if (i === 0) {
           this.context.moveTo(x, y)
         } else {
