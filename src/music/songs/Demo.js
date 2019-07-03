@@ -4,6 +4,7 @@ import Oscillator from '../instruments/demo/Oscillator'
 import Amplitude from '../instruments/demo/Amplitude'
 import Envelope from '../instruments/demo/Envelope'
 import Lfo from '../instruments/demo/Lfo'
+import Fm from '../instruments/demo/Fm'
 
 export default class Demo extends Song {
   tempo = 168
@@ -47,6 +48,9 @@ export default class Demo extends Song {
     },
     {
       instrument: new Lfo(this.audioContext, this.destination),
+    },
+    {
+      instrument: new Fm(this.audioContext, this.destination),
     },
     {
       instrument: new StringMachines(this.audioContext, this.destination),
