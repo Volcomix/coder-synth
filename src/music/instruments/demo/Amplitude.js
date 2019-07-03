@@ -5,7 +5,7 @@ export default class Amplitude extends Instrument {
     this.oscillator = this.audioContext.createOscillator()
     this.oscillator.frequency.value = 172.3
     this.gain = this.audioContext.createGain()
-    this.gain.gain.value = 1
+    this.gain.gain.value = 0.5
     this.oscillator.connect(this.gain)
     this.gain.connect(this.destination)
     this.oscillator.start()
