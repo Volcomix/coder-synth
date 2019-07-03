@@ -5,7 +5,7 @@
       <VToolbarSideIcon @click="drawer = !drawer" />
       <VToolbarTitle class="white--text">{{ songName }}</VToolbarTitle>
       <VBtn v-if="isPlaying" icon @click="stop">
-        <VIcon color="error">stop</VIcon>
+        <VIcon color="primary">stop</VIcon>
       </VBtn>
       <VBtn v-else icon @click="play">
         <VIcon>play_arrow</VIcon>
