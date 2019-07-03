@@ -3,24 +3,20 @@
     <template v-slot:activator="{ on }">
       <VToolbarTitle v-on="on">
         <span v-if="track === null">All tracks</span>
-        <span v-else> Track {{ track + 1 }} ({{ instrumentName }}) </span>
+        <span v-else>Track {{ track + 1 }}</span>
         <VIcon dark>arrow_drop_down</VIcon>
       </VToolbarTitle>
     </template>
     <VList>
       <VListTile :to="{ params: { track: null } }" exact>
-        <VListTileTitle>
-          All tracks
-        </VListTileTitle>
+        <VListTileTitle>All tracks</VListTileTitle>
       </VListTile>
       <VListTile
-        v-for="(instrumentName, index) in instrumentNames"
+        v-for="(_, index) in song.tracks"
         :key="index"
         :to="{ params: { track: index + 1 } }"
       >
-        <VListTileTitle>
-          Track {{ index + 1 }} ({{ instrumentName }})
-        </VListTileTitle>
+        <VListTileTitle>Track {{ index + 1 }}</VListTileTitle>
       </VListTile>
     </VList>
   </VMenu>
@@ -33,18 +29,6 @@ export default {
   props: {
     song: Song,
     track: Number,
-  },
-  computed: {
-    instrumentName() {
-      if (this.track === null) {
-        return null
-      } else {
-        return this.song.tracks[this.track].instrument.constructor.name
-      }
-    },
-    instrumentNames() {
-      return this.song.tracks.map(track => track.instrument.constructor.name)
-    },
   },
 }
 </script>
