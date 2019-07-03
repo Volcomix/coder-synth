@@ -7,7 +7,12 @@ import store from './store'
 
 Vue.config.productionTip = false
 
-Vue.use(Vuetify)
+Vue.use(Vuetify, {
+  theme: {
+    primary: '#f26223',
+    secondary: '#2a2e33',
+  },
+})
 
 new Vue({
   router,

@@ -1,7 +1,7 @@
 <template>
   <VApp>
     <SongsDrawer v-model="drawer" />
-    <VToolbar dark color="primary">
+    <VToolbar dark color="secondary">
       <VToolbarSideIcon @click="drawer = !drawer" />
       <VToolbarTitle class="white--text">{{ songName }}</VToolbarTitle>
       <VBtn v-if="isPlaying" icon @click="stop">
