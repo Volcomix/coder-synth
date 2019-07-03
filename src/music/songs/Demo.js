@@ -2,6 +2,7 @@ import Song from '../common/Song'
 import StringMachines from '../instruments/demo/StringMachines'
 import Oscillator from '../instruments/demo/Oscillator'
 import Amplitude from '../instruments/demo/Amplitude'
+import Envelope from '../instruments/demo/Envelope'
 
 export default class Demo extends Song {
   tempo = 168
@@ -32,6 +33,16 @@ export default class Demo extends Song {
         --- --- --- --- --- --- --- 000
         `,
       },
+    },
+    {
+      instrument: new Envelope(this.audioContext, this.destination),
+      notes: Array.from(
+        { length: 80 },
+        () => `
+        C-4 --- --- --- --- --- --- ---
+        --- --- --- --- OFF --- --- ---
+        `,
+      ).join(' '),
     },
     {
       instrument: new StringMachines(this.audioContext, this.destination),

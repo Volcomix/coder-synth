@@ -1,6 +1,6 @@
 import Instrument from '../../common/Instrument'
 
-export default class Amplitude extends Instrument {
+export default class Envelope extends Instrument {
   start() {
     this.oscillator = this.audioContext.createOscillator()
     this.oscillator.frequency.value = 172.3
@@ -17,21 +17,13 @@ export default class Amplitude extends Instrument {
 
   noteOn(noteFrequency, time) {
     this.oscillator.frequency.setValueAtTime(noteFrequency, time)
+    this.gain.gain.setValueAtTime(0, time)
+    this.gain.gain.linearRampToValueAtTime(1, time + 0.2)
+    this.gain.gain.linearRampToValueAtTime(0.5, time + 0.4)
   }
 
   noteOff(time) {
-    this.oscillator.frequency.setValueAtTime(0, time)
-  }
-
-  fxFrequency(frequency, time) {
-    // Frequency is a value between 0 and 255
-    this.oscillator.frequency.setValueAtTime(
-      110 + (440 * frequency) / 255,
-      time,
-    )
-  }
-
-  fxGain(gain, time) {
-    this.gain.gain.linearRampToValueAtTime(gain / 255, time)
+    this.gain.gain.setValueAtTime(0.5, time)
+    this.gain.gain.linearRampToValueAtTime(0, time + 0.5)
   }
 }
