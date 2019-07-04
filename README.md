@@ -1,4 +1,19 @@
-# audio-pad
+# Coder Synth
+
+A modular audio playground for the Web Audio API.
+
+This playground has initially been created for a hands-on workshop. Take a look at [the presentation slides](https://volcomix.github.io/music-synthesis-js).
+
+You can use this playground right now in [this codesandbox](https://codesandbox.io/s/github/Volcomix/coder-synth) or you can just try the UI [here](https://volcomix.github.io/coder-synth/Demo/Oscillator).
+You can also clone this repo and code in your favorite editor.
+
+
+## How to use the codesandbox
+
+Add your songs in the `src/music/songs` directory.
+> Don't forget to export them in `src/music/songs/index.js`
+
+Then you can create new instruments in the `src/music/instruments` directory and use them as tracks in your song class.
 
 ## Project setup
 ```
@@ -13,6 +28,11 @@ yarn run serve
 ### Compiles and minifies for production
 ```
 yarn run build
+```
+
+### Deploy to Github Pages
+```
+./deploy.sh
 ```
 
 ### Run your tests
