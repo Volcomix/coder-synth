@@ -6,6 +6,7 @@ import Envelope from '../instruments/demo/Envelope'
 import Lfo from '../instruments/demo/Lfo'
 import Fm from '../instruments/demo/Fm'
 import Additive from '../instruments/demo/Additive'
+import Subtractive from '../instruments/demo/Subtractive'
 
 export default class Demo extends Song {
   tempo = 168
@@ -55,6 +56,9 @@ export default class Demo extends Song {
     },
     Additive: {
       instrument: new Additive(this.audioContext, this.destination),
+    },
+    Subtractive: {
+      instrument: new Subtractive(this.audioContext, this.destination),
     },
     Example: {
       instrument: new StringMachines(this.audioContext, this.destination),
