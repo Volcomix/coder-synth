@@ -11,7 +11,7 @@ This playground has initially been created for a hands-on workshop. Take a look 
 * or `git clone` this repo and code in your favorite editor.
 
 
-## How to use the codesandbox
+## Where goes your code
 
 Add your songs in the `src/music/songs` directory.
 > Don't forget to export them in `src/music/songs/index.js`
