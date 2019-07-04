@@ -4,8 +4,11 @@ A modular audio playground for the Web Audio API.
 
 This playground has initially been created for a hands-on workshop. Take a look at [the presentation slides](https://volcomix.github.io/music-synthesis-js).
 
-You can use this playground right now in [this codesandbox](https://codesandbox.io/s/github/Volcomix/coder-synth) or you can just try the UI [here](https://volcomix.github.io/coder-synth/Demo/Oscillator).
-You can also clone this repo and code in your favorite editor.
+## How to use this playground
+
+* go right now in [this codesandbox](https://codesandbox.io/s/github/Volcomix/coder-synth)
+* or you can just try [the UI here](https://volcomix.github.io/coder-synth/Demo/Oscillator).
+* or `git clone` this repo and code in your favorite editor.
 
 
 ## How to use the codesandbox
