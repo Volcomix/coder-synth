@@ -10,21 +10,21 @@ import Additive from '../instruments/demo/Additive'
 export default class Demo extends Song {
   tempo = 168
   notesPerBeat = 2
-  tracks = [
-    {
+  tracks = {
+    Oscillator: {
       instrument: new Oscillator(this.audioContext, this.destination),
     },
-    {
+    Notes: {
       instrument: new Oscillator(this.audioContext, this.destination),
       notes: `
         C-4 --- E-4 --- F#4 --- G-4 ---
         --- --- --- --- --- --- --- OFF
       `,
     },
-    {
+    Amplitude: {
       instrument: new Amplitude(this.audioContext, this.destination),
     },
-    {
+    Effects: {
       instrument: new Amplitude(this.audioContext, this.destination),
       notes: `
         C-4 --- E-4 --- F#4 --- G-4 ---
@@ -32,12 +32,12 @@ export default class Demo extends Song {
       `,
       effects: {
         gain: `
-        056 --- --- --- --- --- 255 ---
+        064 --- --- --- --- --- 255 ---
         --- --- --- --- --- --- --- 000
         `,
       },
     },
-    {
+    Envelope: {
       instrument: new Envelope(this.audioContext, this.destination),
       notes: Array.from(
         { length: 80 },
@@ -47,16 +47,16 @@ export default class Demo extends Song {
         `,
       ).join(' '),
     },
-    {
+    LFO: {
       instrument: new Lfo(this.audioContext, this.destination),
     },
-    {
+    FM: {
       instrument: new Fm(this.audioContext, this.destination),
     },
-    {
+    Additive: {
       instrument: new Additive(this.audioContext, this.destination),
     },
-    {
+    Example: {
       instrument: new StringMachines(this.audioContext, this.destination),
       notes: `
         G-5 --- C-5 --- D#5 F-5
@@ -123,5 +123,5 @@ export default class Demo extends Song {
         `,
       },
     },
-  ]
+  }
 }

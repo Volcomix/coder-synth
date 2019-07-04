@@ -2,21 +2,21 @@
   <VMenu :nudge-width="100">
     <template v-slot:activator="{ on }">
       <VToolbarTitle v-on="on">
-        <span v-if="track === null">All tracks</span>
-        <span v-else>Track {{ track + 1 }}</span>
+        <span v-if="trackName">{{ trackName }}</span>
+        <span v-else>All tracks</span>
         <VIcon dark>arrow_drop_down</VIcon>
       </VToolbarTitle>
     </template>
     <VList>
-      <VListTile :to="{ params: { track: null } }" exact>
+      <VListTile :to="{ params: { trackName: null } }" exact>
         <VListTileTitle>All tracks</VListTileTitle>
       </VListTile>
       <VListTile
-        v-for="(_, index) in song.tracks"
-        :key="index"
-        :to="{ params: { track: index + 1 } }"
+        v-for="(_, name) in song.tracks"
+        :key="name"
+        :to="{ params: { trackName: name } }"
       >
-        <VListTileTitle>Track {{ index + 1 }}</VListTileTitle>
+        <VListTileTitle>{{ name }}</VListTileTitle>
       </VListTile>
     </VList>
   </VMenu>
@@ -28,7 +28,7 @@ import Song from '../music/common/Song'
 export default {
   props: {
     song: Song,
-    track: Number,
+    trackName: String,
   },
 }
 </script>

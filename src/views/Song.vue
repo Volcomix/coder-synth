@@ -11,11 +11,11 @@
         <VIcon>play_arrow</VIcon>
       </VBtn>
       <VSpacer />
-      <TracksMenu :song="song" :track="track" />
+      <TracksMenu :song="song" :trackName="trackName" />
     </VToolbar>
     <VContent>
       <VLayout fill-height column>
-        <Oscilloscope :key="`${songName}-${track}`" :analyser="analyser" />
+        <Oscilloscope :key="`${songName}-${trackName}`" :analyser="analyser" />
         <TrackEffects
           v-if="instrument"
           :instrument="instrument"
@@ -56,18 +56,14 @@ export default {
     songName() {
       return this.$route.params.songName
     },
-    track() {
-      if (this.$route.params.track == null) {
-        return null
-      } else {
-        return this.$route.params.track - 1
-      }
+    trackName() {
+      return this.$route.params.trackName
     },
     instrument() {
-      if (this.track == null) {
-        return null
+      if (this.trackName) {
+        return this.song.tracks[this.trackName].instrument
       } else {
-        return this.song.tracks[this.track].instrument
+        return null
       }
     },
   },
@@ -91,7 +87,7 @@ export default {
       this.song = new songs[this.songName](
         this.audioContext,
         this.analyser,
-        this.track,
+        this.trackName,
       )
     },
     play() {

@@ -1,25 +1,27 @@
 export default class Song {
-  constructor(audioContext, destination, track) {
+  constructor(audioContext, destination, trackName) {
     this.audioContext = audioContext
     this.destination = destination
-    this.track = track
+    this.trackName = trackName
   }
 
   play() {
     const notesPerMinute = this.notesPerBeat * this.tempo
     const secondsPerNote = 60 / notesPerMinute
-    if (this.track == null) {
-      this.tracks.forEach(track => this.playTrack(track, secondsPerNote))
+    if (this.trackName == null) {
+      Object.values(this.tracks).forEach(track =>
+        this.playTrack(track, secondsPerNote),
+      )
     } else {
-      this.playTrack(this.tracks[this.track], secondsPerNote)
+      this.playTrack(this.tracks[this.trackName], secondsPerNote)
     }
   }
 
   stop() {
-    if (this.track == null) {
-      this.tracks.forEach(this.stopTrack)
+    if (this.trackName == null) {
+      Object.values(this.tracks).forEach(this.stopTrack)
     } else {
-      this.stopTrack(this.tracks[this.track])
+      this.stopTrack(this.tracks[this.trackName])
     }
   }
 

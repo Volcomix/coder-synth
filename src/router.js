@@ -19,7 +19,7 @@ export default new Router({
       },
     },
     {
-      path: '/:songName/:track?',
+      path: '/:songName/:trackName?',
       name: 'song',
       component: Song,
     },
