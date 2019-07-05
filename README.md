@@ -6,7 +6,7 @@ This playground has initially been created for a hands-on workshop. You may want
 
 ## How to use this playground
 
-* go in [this codesandbox](https://codesandbox.io/s/github/Volcomix/coder-synth) right now
+* go in [this codesandbox](https://codesandbox.io/s/github/volcomix/coder-synth) right now
 * or you can just try [the UI here](https://volcomix.github.io/coder-synth/Demo/Oscillator).
 * or `git clone` this repo and code in your favorite editor.
 
