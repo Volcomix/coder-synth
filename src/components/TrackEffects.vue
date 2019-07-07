@@ -23,7 +23,11 @@ export default {
   },
   computed: {
     effectNames() {
-      return Object.getOwnPropertyNames(Object.getPrototypeOf(this.instrument))
+      const methodNames = [
+        ...Object.getOwnPropertyNames(Object.getPrototypeOf(this.instrument)),
+        ...Object.keys(this.instrument),
+      ]
+      return methodNames
         .filter(methodName => methodName.startsWith('fx'))
         .map(methodName => methodName.substring(2))
     },

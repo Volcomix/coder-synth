@@ -1,7 +1,9 @@
 import Demo from './Demo'
 import Workshop1907 from './Workshop1907'
+import SynthSecrets from './SynthSecrets'
 
 export default {
-  Workshop1907,
   Demo,
+  Workshop1907,
+  SynthSecrets,
 }
