@@ -3,8 +3,14 @@ import noteFrequencies from '../../common/noteFrequencies'
 
 export default class Speech extends Instrument {
   vowels = ['a', 'e', 'i', 'u', 'o']
+  stops = ['h', 'b', 'g', 'd']
   singerType = 'soprano'
-  formantCount = 5
+  formantCount = 2
+
+  attack = 0.05
+  release = 0.05
+
+  stopped = true
 
   start() {
     this.oscillator = this.audioContext.createOscillator()
@@ -40,11 +46,12 @@ export default class Speech extends Instrument {
 
   noteOn(frequency, time) {
     this.oscillator.frequency.setValueAtTime(frequency, time)
-    this.envelope.gain.setTargetAtTime(1, time, 0.05)
+    this.envelope.gain.setTargetAtTime(1, time, this.attack)
   }
 
   noteOff(time) {
-    this.envelope.gain.setTargetAtTime(0, time, 0.05)
+    this.envelope.gain.setTargetAtTime(0, time, this.release)
+    this.stopped = true
   }
 
   fxPitch(pitch, time) {
@@ -58,27 +65,47 @@ export default class Speech extends Instrument {
     this.volume.gain.setValueAtTime((10 * gain) / 255, time)
   }
 
+  fxStop(stop, time) {
+    this.envelope.gain.setTargetAtTime(0, time - this.release, this.release)
+    if (stop === 0) {
+      this.stopped = true
+    } else {
+      const freq = stopTable[this.stops[stop]]
+      this.formants[0].bpf.frequency.setValueAtTime(200, time)
+      this.formants[1].bpf.frequency.setValueAtTime(freq, time)
+    }
+  }
+
   fxVowel(vowel, time) {
     this.formantParams(vowel).forEach(({ freq, q, gain }, i) => {
-      this.formants[i].bpf.frequency.setTargetAtTime(freq, time - 0.05, 0.05)
-      this.formants[i].bpf.Q.setTargetAtTime(q, time - 0.05, 0.05)
-      this.formants[i].vca.gain.setTargetAtTime(gain, time - 0.05, 0.05)
+      if (this.stopped) {
+        this.formants[i].bpf.frequency.setValueAtTime(freq, time)
+        this.formants[i].bpf.Q.setValueAtTime(q, time)
+        this.formants[i].vca.gain.setValueAtTime(gain, time)
+      } else {
+        this.formants[i].bpf.frequency.setTargetAtTime(freq, time, this.attack)
+        this.formants[i].bpf.Q.setTargetAtTime(q, time, this.attack)
+        this.formants[i].vca.gain.setTargetAtTime(gain, time, this.attack)
+      }
     })
+    this.stopped = false
   }
 
   fxDiphthong1(vowel, time) {
+    const startTime = time + this.attack
     this.formantParams(vowel).forEach(({ freq, q, gain }, i) => {
-      this.formants[i].bpf.frequency.setTargetAtTime(freq, time, 0.1)
-      this.formants[i].bpf.Q.setTargetAtTime(q, time, 0.1)
-      this.formants[i].vca.gain.setTargetAtTime(gain, time, 0.1)
+      this.formants[i].bpf.frequency.setTargetAtTime(freq, startTime, 0.1)
+      this.formants[i].bpf.Q.setTargetAtTime(q, startTime, 0.1)
+      this.formants[i].vca.gain.setTargetAtTime(gain, startTime, 0.1)
     })
   }
 
   fxDiphthong2(vowel, time) {
+    const startTime = time + this.attack + 0.1
     this.formantParams(vowel).forEach(({ freq, q, gain }, i) => {
-      this.formants[i].bpf.frequency.setTargetAtTime(freq, time + 0.1, 0.1)
-      this.formants[i].bpf.Q.setTargetAtTime(q, time + 0.1, 0.1)
-      this.formants[i].vca.gain.setTargetAtTime(gain, time + 0.1, 0.1)
+      this.formants[i].bpf.frequency.setTargetAtTime(freq, startTime, 0.1)
+      this.formants[i].bpf.Q.setTargetAtTime(q, startTime, 0.1)
+      this.formants[i].vca.gain.setTargetAtTime(gain, startTime, 0.1)
     })
   }
 
@@ -240,4 +267,10 @@ const formantTable = {
     amp: [0, -20, -32, -28, -36],
     bw: [40, 80, 100, 120, 120],
   },
+}
+
+const stopTable = {
+  b: 700,
+  g: 1300,
+  d: 2000,
 }

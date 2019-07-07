@@ -36,19 +36,27 @@ export default class SynthSecrets extends Song {
     },
     Speech: {
       instrument: new Speech(this.audioContext, this.destination),
-      notes: `---
-        F-2 --- --- OFF F-2 --- OFF ---
+      notes: `
+        E-2 F-2 G-2 A-2 --- F-2 G-2 OFF
+        A-2 --- G-2 F-2 --- --- OFF ---
       `,
       effects: {
         volume: '64',
-        vowel: `---
-        255 000 064 --- 128 --- --- ---
+        stop: `
+        --- --- --- 000 --- 001 001 ---
+        --- --- 003 003 --- --- --- ---
         `,
-        diphthong1: `---
-        000 255 192 --- --- --- --- ---
+        vowel: `
+        255 000 064 128 --- 032 128 ---
+        255 --- 000 128 --- --- --- ---
         `,
-        diphthong2: `---
-        128 --- --- --- 016 --- --- ---
+        diphthong1: `
+        000 255 192 --- --- 064 --- ---
+        --- --- --- --- --- --- --- ---
+        `,
+        diphthong2: `
+        128 --- --- 016 --- --- --- ---
+        016 --- --- --- --- --- --- ---
         `,
       },
     },
