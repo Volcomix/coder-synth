@@ -2,6 +2,7 @@ import Song from '../common/Song'
 import Subtractive from '../instruments/synth-secrets/Subtractive'
 import Envelope from '../instruments/synth-secrets/Envelope'
 import Formant from '../instruments/synth-secrets/Formant'
+import Speech from '../instruments/synth-secrets/Speech'
 
 export default class SynthSecrets extends Song {
   tempo = 120
@@ -31,6 +32,27 @@ export default class SynthSecrets extends Song {
       effects: {
         vowel: '0',
         volume: '64',
+      },
+    },
+    Speech: {
+      instrument: new Speech(this.audioContext, this.destination),
+      notes: `
+        ---
+        F-3 --- --- OFF F-3 --- OFF ---
+      `,
+      effects: {
+        vowel: `
+        ---
+        255 000 064 --- 064 --- --- ---
+        `,
+        diphthong1: `
+        ---
+        000 255 192 --- 128 --- --- ---
+        `,
+        diphthong2: `
+        ---
+        128 --- --- --- 016 --- --- ---
+        `,
       },
     },
   }
