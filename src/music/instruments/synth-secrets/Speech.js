@@ -70,14 +70,16 @@ export default class Speech extends Instrument {
     if (stop === 0) {
       this.stopped = true
     } else {
-      const freq = stopTable[this.stops[stop]]
-      this.formants[0].bpf.frequency.setValueAtTime(200, time)
-      this.formants[1].bpf.frequency.setValueAtTime(freq, time)
+      this.stopFormants(stop).forEach(({ freq, q }, i) => {
+        this.formants[i].bpf.frequency.setValueAtTime(freq, time)
+        this.formants[i].bpf.Q.setValueAtTime(q, time)
+        this.formants[i].vca.gain.setValueAtTime(0.25, time)
+      })
     }
   }
 
   fxVowel(vowel, time) {
-    this.formantParams(vowel).forEach(({ freq, q, gain }, i) => {
+    this.vowelFormants(vowel).forEach(({ freq, q, gain }, i) => {
       if (this.stopped) {
         this.formants[i].bpf.frequency.setValueAtTime(freq, time)
         this.formants[i].bpf.Q.setValueAtTime(q, time)
@@ -93,7 +95,7 @@ export default class Speech extends Instrument {
 
   fxDiphthong1(vowel, time) {
     const startTime = time + this.attack
-    this.formantParams(vowel).forEach(({ freq, q, gain }, i) => {
+    this.vowelFormants(vowel).forEach(({ freq, q, gain }, i) => {
       this.formants[i].bpf.frequency.setTargetAtTime(freq, startTime, 0.1)
       this.formants[i].bpf.Q.setTargetAtTime(q, startTime, 0.1)
       this.formants[i].vca.gain.setTargetAtTime(gain, startTime, 0.1)
@@ -102,29 +104,50 @@ export default class Speech extends Instrument {
 
   fxDiphthong2(vowel, time) {
     const startTime = time + this.attack + 0.1
-    this.formantParams(vowel).forEach(({ freq, q, gain }, i) => {
+    this.vowelFormants(vowel).forEach(({ freq, q, gain }, i) => {
       this.formants[i].bpf.frequency.setTargetAtTime(freq, startTime, 0.1)
       this.formants[i].bpf.Q.setTargetAtTime(q, startTime, 0.1)
       this.formants[i].vca.gain.setTargetAtTime(gain, startTime, 0.1)
     })
   }
 
-  formantParams(vowel) {
+  vowelFormants(vowel) {
     const i = vowel === 255 ? 3.99999 : (4 * vowel) / 255
     const vowelIndex = Math.floor(i)
     const offset = i - vowelIndex
-    const vowel1Name = this.vowels[vowelIndex]
-    const vowel2Name = this.vowels[vowelIndex + 1]
-    const vowel1 = formantTable[`${this.singerType} "${vowel1Name}"`]
-    const vowel2 = formantTable[`${this.singerType} "${vowel2Name}"`]
+    const vowel1 = this.vowels[vowelIndex]
+    const vowel2 = this.vowels[vowelIndex + 1]
+    const formant1 = vowelFormantTable[`${this.singerType} "${vowel1}"`]
+    const formant2 = vowelFormantTable[`${this.singerType} "${vowel2}"`]
     return Array.from({ length: this.formantCount }, (_, i) => {
-      const freq = this.lerp(vowel1.freq[i], vowel2.freq[i], offset)
-      const bw = this.lerp(vowel1.bw[i], vowel2.bw[i], offset)
-      const q = freq / bw
-      const amp = this.lerp(vowel1.amp[i], vowel2.amp[i], offset)
-      const gain = Math.pow(10, amp / 20)
-      return { freq, q, gain }
+      const freq = this.lerp(formant1.freq[i], formant2.freq[i], offset)
+      const bw = this.lerp(formant1.bw[i], formant2.bw[i], offset)
+      const amp = this.lerp(formant1.amp[i], formant2.amp[i], offset)
+      return {
+        freq,
+        q: this.bwToQ(bw, freq),
+        gain: this.ampToGain(amp),
+      }
     })
+  }
+
+  stopFormants(stop) {
+    return Array.from({ length: Math.min(3, this.formantCount) }, (_, i) => {
+      const formant = stopFormantTable[this.stops[stop]]
+      const freq = formant.freq[i]
+      return {
+        freq,
+        q: this.bwToQ(formant.bw[i], freq),
+      }
+    })
+  }
+
+  bwToQ(bw, freq) {
+    return freq / bw
+  }
+
+  ampToGain(amp) {
+    return Math.pow(10, amp / 20)
   }
 
   lerp(x, y, a) {
@@ -141,7 +164,7 @@ export default class Speech extends Instrument {
 //   amp: $$('td:not(:first-of-type)', rows[i * 4 + 2]).map(node => parseInt(node.innerText.trim())),
 //   bw: $$('td:not(:first-of-type)', rows[i * 4 + 3]).map(node => parseInt(node.innerText.trim()))
 // }]).reduce((result, [vowel, formants]) => Object.assign(result, {[vowel]: formants}), {})))
-const formantTable = {
+const vowelFormantTable = {
   'soprano "a"': {
     freq: [800, 1150, 2900, 3900, 4950],
     amp: [0, -6, -32, -20, -50],
@@ -269,8 +292,17 @@ const formantTable = {
   },
 }
 
-const stopTable = {
-  b: 700,
-  g: 1300,
-  d: 2000,
+const stopFormantTable = {
+  b: {
+    freq: [200, 1100, 2150],
+    bw: [60, 110, 130],
+  },
+  g: {
+    freq: [200, 1990, 2850],
+    bw: [60, 150, 280],
+  },
+  d: {
+    freq: [200, 1600, 2600],
+    bw: [60, 100, 170],
+  },
 }
