@@ -3,6 +3,8 @@ import Subtractive from '../instruments/synth-secrets/Subtractive'
 import Envelope from '../instruments/synth-secrets/Envelope'
 import Formant from '../instruments/synth-secrets/Formant'
 import Speech from '../instruments/synth-secrets/Speech'
+import Scream from '../instruments/synth-secrets/Scream'
+import Feedback from '../instruments/synth-secrets/Feedback'
 
 export default class SynthSecrets extends Song {
   tempo = 120
@@ -64,6 +66,12 @@ export default class SynthSecrets extends Song {
         --- --- --- --- --- --- --- ---
         `,
       },
+    },
+    Scream: {
+      instrument: new Scream(this.audioContext, this.destination),
+    },
+    Feedback: {
+      instrument: new Feedback(this.audioContext, this.destination),
     },
   }
 }
