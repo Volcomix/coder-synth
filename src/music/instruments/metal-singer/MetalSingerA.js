@@ -3,8 +3,12 @@ import noteFrequencies from '../../common/noteFrequencies'
 
 export default class MetalSingerA extends Instrument {
   start() {
+    this.fm = this.audioContext.createGain()
+
     this.oscillator = this.audioContext.createOscillator()
     this.oscillator.type = 'sawtooth'
+
+    this.feedback = this.audioContext.createGain()
 
     this.formant1Filter = this.audioContext.createBiquadFilter()
     this.formant1Filter.type = 'bandpass'
@@ -33,15 +37,20 @@ export default class MetalSingerA extends Instrument {
     this.mixer = this.audioContext.createGain()
     this.mixer.gain.value = (10 * 100) / 255
 
-    this.oscillator.connect(this.formant1Filter)
+    this.oscillator.connect(this.feedback)
+    this.feedback.connect(this.feedback)
+    this.feedback.connect(this.fm)
+    this.fm.connect(this.oscillator.frequency)
+
+    this.feedback.connect(this.formant1Filter)
     this.formant1Filter.connect(this.formant1Gain)
     this.formant1Gain.connect(this.mixer)
 
-    this.oscillator.connect(this.formant2Filter)
+    this.feedback.connect(this.formant2Filter)
     this.formant2Filter.connect(this.formant2Gain)
     this.formant2Gain.connect(this.mixer)
 
-    this.oscillator.connect(this.formant3Filter)
+    this.feedback.connect(this.formant3Filter)
     this.formant3Filter.connect(this.formant3Gain)
     this.formant3Gain.connect(this.mixer)
 
@@ -71,6 +80,14 @@ export default class MetalSingerA extends Instrument {
     } else {
       this.oscillator.type = 'triangle'
     }
+  }
+
+  fxFeedback(gain, time) {
+    this.feedback.gain.setValueAtTime(gain / 255, time)
+  }
+
+  fxFm(gain, time) {
+    this.fm.gain.setValueAtTime(gain, time)
   }
 
   xfxFormant1Pitch(pitch, time) {
