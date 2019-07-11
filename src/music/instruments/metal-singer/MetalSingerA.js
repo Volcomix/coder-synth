@@ -4,11 +4,13 @@ import noteFrequencies from '../../common/noteFrequencies'
 export default class MetalSingerA extends Instrument {
   start() {
     this.fm = this.audioContext.createGain()
+    this.fm.gain.value = 0
 
     this.oscillator = this.audioContext.createOscillator()
     this.oscillator.type = 'sawtooth'
 
     this.feedback = this.audioContext.createGain()
+    this.feedback.gain.value = 0.5
 
     this.formant1Filter = this.audioContext.createBiquadFilter()
     this.formant1Filter.type = 'bandpass'
@@ -82,12 +84,20 @@ export default class MetalSingerA extends Instrument {
     }
   }
 
-  fxFeedback(gain, time) {
+  xfxFeedback(gain, time) {
     this.feedback.gain.setValueAtTime(gain / 255, time)
   }
 
-  fxFm(gain, time) {
+  xfxFm(gain, time) {
     this.fm.gain.setValueAtTime(gain, time)
+  }
+
+  fxScream(scream, time) {
+    this.feedback.gain.setValueAtTime(
+      (180 + ((240 - 180) * scream) / 255) / 255,
+      time,
+    )
+    this.fm.gain.setValueAtTime((180 * scream) / 255, time)
   }
 
   xfxFormant1Pitch(pitch, time) {
