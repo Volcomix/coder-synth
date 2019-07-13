@@ -19,10 +19,10 @@ export default class MetalSingerA extends Instrument {
     this.noise.loop = true
 
     this.noiseGain = this.audioContext.createGain()
-    this.noiseGain.gain.value = 0.75
+    this.noiseGain.gain.value = 0.25
 
     this.noiseMod = this.audioContext.createGain()
-    this.noiseMod.gain.value = 600
+    this.noiseMod.gain.value = 0
 
     this.osc = this.audioContext.createOscillator()
     this.osc.type = 'sawtooth'
@@ -45,7 +45,7 @@ export default class MetalSingerA extends Instrument {
     this.f2Gain.gain.value = this.ampToGain(-4)
 
     this.mixer = this.audioContext.createGain()
-    this.mixer.gain.value = this.mixerToGain(215)
+    this.mixer.gain.value = this.mixerToGain(128)
 
     this.noise.connect(this.noiseGain)
 
@@ -80,7 +80,7 @@ export default class MetalSingerA extends Instrument {
     }
   }
 
-  fxOscType(type) {
+  xfxOscType(type) {
     if (type < 64) {
       this.osc.type = 'sine'
     } else if (type < 128) {
@@ -92,37 +92,44 @@ export default class MetalSingerA extends Instrument {
     }
   }
 
-  fxNoiseGain(gain, time) {
+  xfxNoiseGain(gain, time) {
     this.noiseGain.gain.setValueAtTime(gain / 255, time)
   }
 
-  fxMod(mod, time) {
+  xfxMod(mod, time) {
     this.noiseMod.gain.setValueAtTime(10 * mod, time)
   }
 
-  fxF1Freq(freq, time) {
+  fxScream(amount, time) {
+    const gain = 64 + (140 * amount) / 255
+    const mod = amount
+    this.noiseGain.gain.setValueAtTime(gain / 255, time)
+    this.noiseMod.gain.setValueAtTime(10 * mod, time)
+  }
+
+  xfxF1Freq(freq, time) {
     this.f1Freq = 10 * freq
     this.f1Filter.frequency.setValueAtTime(this.f1Freq, time)
   }
 
-  fxF1Bw(bw, time) {
+  xfxF1Bw(bw, time) {
     this.f1Filter.Q.setValueAtTime(this.bwToQ(bw, this.f1Freq), time)
   }
 
-  fxF1Amp(amp, time) {
+  xfxF1Amp(amp, time) {
     this.f1Gain.gain.setValueAtTime(this.ampToGain(-amp), time)
   }
 
-  fxF2Freq(freq, time) {
+  xfxF2Freq(freq, time) {
     this.f2Freq = 10 * freq
     this.f2Filter.frequency.setValueAtTime(this.f2Freq, time)
   }
 
-  fxF2Bw(bw, time) {
+  xfxF2Bw(bw, time) {
     this.f2Filter.Q.setValueAtTime(this.bwToQ(bw, this.f2Freq), time)
   }
 
-  fxF2Amp(amp, time) {
+  xfxF2Amp(amp, time) {
     this.f2Gain.gain.setValueAtTime(this.ampToGain(-amp), time)
   }
 
