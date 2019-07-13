@@ -47,8 +47,13 @@ export default class MetalSingerA extends Instrument {
     this.distortion = this.audioContext.createWaveShaper()
     this.distortion.curve = this.makeDistortionCurve(400)
 
+    this.filter = this.audioContext.createBiquadFilter()
+    this.filter.type = 'lowshelf'
+    this.filter.frequency.value = 340
+    this.filter.gain.value = 5
+
     this.mixer = this.audioContext.createGain()
-    this.mixer.gain.value = this.mixerToGain(64)
+    this.mixer.gain.value = this.mixerToGain(50)
 
     this.noise.connect(this.noiseGain)
 
@@ -65,7 +70,8 @@ export default class MetalSingerA extends Instrument {
     this.f2Filter.connect(this.f2Gain)
     this.f2Gain.connect(this.distortion)
 
-    this.distortion.connect(this.mixer)
+    this.distortion.connect(this.filter)
+    this.filter.connect(this.mixer)
 
     this.mixer.connect(this.destination)
 
@@ -105,13 +111,6 @@ export default class MetalSingerA extends Instrument {
     this.noiseMod.gain.setValueAtTime(10 * mod, time)
   }
 
-  xfxScream(amount, time) {
-    const gain = 64 + (140 * amount) / 255
-    const mod = amount
-    this.noiseGain.gain.setValueAtTime(gain / 255, time)
-    this.noiseMod.gain.setValueAtTime(10 * mod, time)
-  }
-
   xfxF1Freq(freq, time) {
     this.f1Freq = 10 * freq
     this.f1Filter.frequency.setValueAtTime(this.f1Freq, time)
@@ -142,7 +141,15 @@ export default class MetalSingerA extends Instrument {
     this.distortion.curve = this.makeDistortionCurve(10 * amount)
   }
 
-  xfxMixer(mixer, time) {
+  xfxFilterFreq(freq, time) {
+    this.filter.frequency.setValueAtTime(freq * 10, time)
+  }
+
+  xfxFilterGain(gain, time) {
+    this.filter.gain.setValueAtTime(gain, time)
+  }
+
+  fxMixer(mixer, time) {
     this.mixer.gain.setValueAtTime(this.mixerToGain(mixer), time)
   }
 
