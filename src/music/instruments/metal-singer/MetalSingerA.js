@@ -3,161 +3,142 @@ import noteFrequencies from '../../common/noteFrequencies'
 
 export default class MetalSingerA extends Instrument {
   start() {
-    this.fm = this.audioContext.createGain()
-    this.fm.gain.value = 0
+    const noiseLength = 2
+    const bufferSize = this.audioContext.sampleRate * noiseLength
+    const buffer = this.audioContext.createBuffer(
+      1,
+      bufferSize,
+      this.audioContext.sampleRate,
+    )
+    const data = buffer.getChannelData(0)
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = Math.random() * 2 - 1
+    }
+    this.noise = this.audioContext.createBufferSource()
+    this.noise.buffer = buffer
+    this.noise.loop = true
 
-    this.oscillator = this.audioContext.createOscillator()
-    this.oscillator.type = 'sawtooth'
+    this.noiseGain = this.audioContext.createGain()
+    this.noiseGain.gain.value = 0.75
 
-    this.feedback = this.audioContext.createGain()
-    this.feedback.gain.value = 0.5
+    this.noiseMod = this.audioContext.createGain()
+    this.noiseMod.gain.value = 600
 
-    this.formant1Filter = this.audioContext.createBiquadFilter()
-    this.formant1Filter.type = 'bandpass'
-    this.formant1Filter.frequency.value = Object.values(noteFrequencies)[68]
-    this.formant1Filter.Q.value = 11
+    this.osc = this.audioContext.createOscillator()
+    this.osc.type = 'sawtooth'
+    this.osc.frequency.value = noteFrequencies['C#4']
 
-    this.formant1Gain = this.audioContext.createGain()
-    this.formant1Gain.gain.value = 1
+    this.f1Filter = this.audioContext.createBiquadFilter()
+    this.f1Filter.type = 'bandpass'
+    this.f1Filter.frequency.value = this.f1Freq = 750
+    this.f1Filter.Q.value = this.bwToQ(80, this.f1Freq)
 
-    this.formant2Filter = this.audioContext.createBiquadFilter()
-    this.formant2Filter.type = 'bandpass'
-    this.formant2Filter.frequency.value = Object.values(noteFrequencies)[74]
-    this.formant2Filter.Q.value = 32
+    this.f1Gain = this.audioContext.createGain()
+    this.f1Gain.gain.value = this.ampToGain(0)
 
-    this.formant2Gain = this.audioContext.createGain()
-    this.formant2Gain.gain.value = 219 / 255
+    this.f2Filter = this.audioContext.createBiquadFilter()
+    this.f2Filter.type = 'bandpass'
+    this.f2Filter.frequency.value = this.f2Freq = 1150
+    this.f2Filter.Q.value = this.bwToQ(90, this.f2Freq)
 
-    this.formant3Filter = this.audioContext.createBiquadFilter()
-    this.formant3Filter.type = 'bandpass'
-    this.formant3Filter.frequency.value = Object.values(noteFrequencies)[90]
-    this.formant3Filter.Q.value = 51
-
-    this.formant3Gain = this.audioContext.createGain()
-    this.formant3Gain.gain.value = 160 / 255
+    this.f2Gain = this.audioContext.createGain()
+    this.f2Gain.gain.value = this.ampToGain(-4)
 
     this.mixer = this.audioContext.createGain()
-    this.mixer.gain.value = (10 * 100) / 255
+    this.mixer.gain.value = this.mixerToGain(215)
 
-    this.oscillator.connect(this.feedback)
-    this.feedback.connect(this.feedback)
-    this.feedback.connect(this.fm)
-    this.fm.connect(this.oscillator.frequency)
+    this.noise.connect(this.noiseGain)
 
-    this.feedback.connect(this.formant1Filter)
-    this.formant1Filter.connect(this.formant1Gain)
-    this.formant1Gain.connect(this.mixer)
+    this.noise.connect(this.noiseMod)
+    this.noiseMod.connect(this.osc.frequency)
 
-    this.feedback.connect(this.formant2Filter)
-    this.formant2Filter.connect(this.formant2Gain)
-    this.formant2Gain.connect(this.mixer)
+    this.noiseGain.connect(this.f1Filter)
+    this.osc.connect(this.f1Filter)
+    this.f1Filter.connect(this.f1Gain)
+    this.f1Gain.connect(this.mixer)
 
-    this.feedback.connect(this.formant3Filter)
-    this.formant3Filter.connect(this.formant3Gain)
-    this.formant3Gain.connect(this.mixer)
+    this.noiseGain.connect(this.f2Filter)
+    this.osc.connect(this.f2Filter)
+    this.f2Filter.connect(this.f2Gain)
+    this.f2Gain.connect(this.mixer)
 
     this.mixer.connect(this.destination)
 
-    this.oscillator.start()
+    this.noise.start()
+    this.osc.start()
   }
 
   stop() {
-    this.oscillator.stop()
+    this.noise.stop()
+    this.osc.stop()
   }
 
-  fxOscillatorPitch(pitch, time) {
-    const frequency = Object.values(noteFrequencies)[pitch]
-    if (frequency) {
-      this.oscillator.frequency.setValueAtTime(frequency, time)
+  fxOscPitch(pitch, time) {
+    const freq = Object.values(noteFrequencies)[pitch]
+    if (freq) {
+      this.osc.frequency.setValueAtTime(freq, time)
     }
   }
 
-  fxOscillatorType(type) {
+  fxOscType(type) {
     if (type < 64) {
-      this.oscillator.type = 'sine'
+      this.osc.type = 'sine'
     } else if (type < 128) {
-      this.oscillator.type = 'square'
+      this.osc.type = 'square'
     } else if (type < 192) {
-      this.oscillator.type = 'sawtooth'
+      this.osc.type = 'sawtooth'
     } else {
-      this.oscillator.type = 'triangle'
+      this.osc.type = 'triangle'
     }
   }
 
-  xfxFeedback(gain, time) {
-    this.feedback.gain.setValueAtTime(gain / 255, time)
+  fxNoiseGain(gain, time) {
+    this.noiseGain.gain.setValueAtTime(gain / 255, time)
   }
 
-  xfxFm(gain, time) {
-    this.fm.gain.setValueAtTime(gain, time)
+  fxMod(mod, time) {
+    this.noiseMod.gain.setValueAtTime(10 * mod, time)
   }
 
-  fxScream(scream, time) {
-    this.feedback.gain.setValueAtTime(
-      (180 + ((240 - 180) * scream) / 255) / 255,
-      time,
-    )
-    this.fm.gain.setValueAtTime((180 * scream) / 255, time)
+  fxF1Freq(freq, time) {
+    this.f1Freq = 10 * freq
+    this.f1Filter.frequency.setValueAtTime(this.f1Freq, time)
   }
 
-  xfxFormant1Pitch(pitch, time) {
-    const frequency = Object.values(noteFrequencies)[pitch]
-    if (frequency) {
-      this.formant1Filter.frequency.setValueAtTime(frequency, time)
-    }
+  fxF1Bw(bw, time) {
+    this.f1Filter.Q.setValueAtTime(this.bwToQ(bw, this.f1Freq), time)
   }
 
-  xfxFormant1Detune(detune, time) {
-    this.formant1Filter.detune.setValueAtTime(detune, time)
+  fxF1Amp(amp, time) {
+    this.f1Gain.gain.setValueAtTime(this.ampToGain(-amp), time)
   }
 
-  xfxFormant1Q(q, time) {
-    this.formant1Filter.Q.setValueAtTime(q, time)
+  fxF2Freq(freq, time) {
+    this.f2Freq = 10 * freq
+    this.f2Filter.frequency.setValueAtTime(this.f2Freq, time)
   }
 
-  xfxFormant1Gain(gain, time) {
-    this.formant1Gain.gain.setValueAtTime(gain / 255, time)
+  fxF2Bw(bw, time) {
+    this.f2Filter.Q.setValueAtTime(this.bwToQ(bw, this.f2Freq), time)
   }
 
-  xfxFormant2Pitch(pitch, time) {
-    const frequency = Object.values(noteFrequencies)[pitch]
-    if (frequency) {
-      this.formant2Filter.frequency.setValueAtTime(frequency, time)
-    }
+  fxF2Amp(amp, time) {
+    this.f2Gain.gain.setValueAtTime(this.ampToGain(-amp), time)
   }
 
-  xfxFormant2Detune(detune, time) {
-    this.formant2Filter.detune.setValueAtTime(detune, time)
+  fxMixer(mixer, time) {
+    this.mixer.gain.setValueAtTime(this.mixerToGain(mixer), time)
   }
 
-  xfxFormant2Q(q, time) {
-    this.formant2Filter.Q.setValueAtTime(q, time)
+  mixerToGain(mixer) {
+    return (10 * mixer) / 255
   }
 
-  xfxFormant2Gain(gain, time) {
-    this.formant2Gain.gain.setValueAtTime(gain / 255, time)
+  bwToQ(bw, freq) {
+    return freq / bw
   }
 
-  xfxFormant3Pitch(pitch, time) {
-    const frequency = Object.values(noteFrequencies)[pitch]
-    if (frequency) {
-      this.formant3Filter.frequency.setValueAtTime(frequency, time)
-    }
-  }
-
-  xfxFormant3Detune(detune, time) {
-    this.formant3Filter.detune.setValueAtTime(detune, time)
-  }
-
-  xfxFormant3Q(q, time) {
-    this.formant3Filter.Q.setValueAtTime(q, time)
-  }
-
-  xfxFormant3Gain(gain, time) {
-    this.formant3Gain.gain.setValueAtTime(gain / 255, time)
-  }
-
-  fxMixer(gain, time) {
-    this.mixer.gain.setValueAtTime((10 * gain) / 255, time)
+  ampToGain(amp) {
+    return Math.pow(10, amp / 20)
   }
 }
