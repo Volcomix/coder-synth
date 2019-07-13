@@ -1,14 +1,21 @@
 <template>
-  <VCard class="pt-3">
-    <VCardText>
-      <VSlider
-        v-for="effectName in effectNames"
-        :key="effectName"
-        thumb-label="always"
-        :max="255"
-        :label="effectName"
-        @input="setEffect(effectName, $event)"
-      ></VSlider>
+  <VCard>
+    <VCardText class="mt-3 ml-3 pt-3 pl-3 pb-0 pr-0">
+      <VLayout wrap>
+        <template v-for="effectName in effectNames">
+          <VFlex :key="`slider-${effectName}`" xs8 md4 xl2>
+            <VSlider
+              thumb-label="always"
+              :max="255"
+              @input="setEffect(effectName, $event)"
+            >
+            </VSlider>
+          </VFlex>
+          <VFlex :key="`label-${effectName}`" xs4 md2 xl1 pt-2>
+            <VSubheader>{{ effectName }}</VSubheader>
+          </VFlex>
+        </template>
+      </VLayout>
     </VCardText>
   </VCard>
 </template>
@@ -41,3 +48,9 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.slider {
+  width: 300px;
+}
+</style>
