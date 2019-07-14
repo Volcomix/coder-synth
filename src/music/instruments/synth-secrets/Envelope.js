@@ -1,6 +1,6 @@
 import Instrument from '../../common/Instrument'
 
-export default class Part3Envelope extends Instrument {
+export default class Envelope extends Instrument {
   attack = 7 / 255
   decay = 40 / 255
   sustain = 59 / 255

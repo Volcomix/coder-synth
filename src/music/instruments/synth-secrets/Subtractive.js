@@ -1,6 +1,6 @@
 import Instrument from '../../common/Instrument'
 
-export default class Part1Subtractive extends Instrument {
+export default class Subtractive extends Instrument {
   /**
    * @param {AudioContext} audioContext
    * @param {AudioDestinationNode} destination
