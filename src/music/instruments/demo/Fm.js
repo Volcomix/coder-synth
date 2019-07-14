@@ -28,14 +28,14 @@ export default class Fm extends Instrument {
     this.oscillator2.stop()
   }
 
-  fxOscillator1Frequency(frequency, time) {
+  fxOsc1Frequency(frequency, time) {
     this.oscillator1.frequency.setValueAtTime(
       110 + (440 * frequency) / 255,
       time,
     )
   }
 
-  fxOscillator2Frequency(frequency, time) {
+  fxOsc2Frequency(frequency, time) {
     this.oscillator2.frequency.setValueAtTime(
       110 + (440 * frequency) / 255,
       time,
