@@ -13,20 +13,20 @@ export default class Demo extends Song {
   notesPerBeat = 2
   tracks = {
     Oscillator: {
-      instrument: new Oscillator(this.audioContext, this.destination),
+      instrument: new Oscillator(),
     },
     Notes: {
-      instrument: new Oscillator(this.audioContext, this.destination),
+      instrument: new Oscillator(),
       notes: `
         C-4 --- E-4 --- F#4 --- G-4 ---
         --- --- --- --- --- --- --- OFF
       `,
     },
     Amplitude: {
-      instrument: new Amplitude(this.audioContext, this.destination),
+      instrument: new Amplitude(),
     },
     Effects: {
-      instrument: new Amplitude(this.audioContext, this.destination),
+      instrument: new Amplitude(),
       notes: `
         C-4 --- E-4 --- F#4 --- G-4 ---
         --- --- --- --- --- --- --- OFF
@@ -39,7 +39,7 @@ export default class Demo extends Song {
       },
     },
     Envelope: {
-      instrument: new Envelope(this.audioContext, this.destination),
+      instrument: new Envelope(),
       notes: Array.from(
         { length: 80 },
         () => `
@@ -49,19 +49,19 @@ export default class Demo extends Song {
       ).join(' '),
     },
     LFO: {
-      instrument: new Lfo(this.audioContext, this.destination),
+      instrument: new Lfo(),
     },
     FM: {
-      instrument: new Fm(this.audioContext, this.destination),
+      instrument: new Fm(),
     },
     Additive: {
-      instrument: new Additive(this.audioContext, this.destination),
+      instrument: new Additive(),
     },
     Subtractive: {
-      instrument: new Subtractive(this.audioContext, this.destination),
+      instrument: new Subtractive(),
     },
     Example: {
-      instrument: new StringMachines(this.audioContext, this.destination),
+      instrument: new StringMachines(),
       notes: `
         G-5 --- C-5 --- D#5 F-5
         G-5 --- C-5 --- D#5 F-5

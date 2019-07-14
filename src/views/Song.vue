@@ -76,27 +76,28 @@ export default {
     },
   },
   created() {
-    this.audioContext = new AudioContext()
-    this.analyser = this.audioContext.createAnalyser()
-    this.analyser.fftSize = 2048
-    this.analyser.connect(this.audioContext.destination)
     this.createSong()
   },
   methods: {
     createSong() {
-      this.song = new songs[this.songName](
-        this.audioContext,
-        this.analyser,
-        this.trackName,
-      )
+      this.song = new songs[this.songName](this.trackName)
     },
     play() {
-      this.song.play()
+      if (!this.audioContext) {
+        this.createAudioContext()
+      }
+      this.song.play(this.audioContext, this.analyser)
       this.isPlaying = true
     },
     stop() {
       this.song.stop()
       this.isPlaying = false
+    },
+    createAudioContext() {
+      this.audioContext = new AudioContext()
+      this.analyser = this.audioContext.createAnalyser()
+      this.analyser.fftSize = 2048
+      this.analyser.connect(this.audioContext.destination)
     },
   },
 }

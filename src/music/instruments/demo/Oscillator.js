@@ -1,11 +1,15 @@
 import Instrument from '../../common/Instrument'
 
 export default class Oscillator extends Instrument {
-  start() {
-    this.oscillator = this.audioContext.createOscillator()
+  /**
+   * @param {AudioContext} audioContext
+   * @param {AudioDestinationNode} destination
+   */
+  start(audioContext, destination) {
+    this.oscillator = audioContext.createOscillator()
     this.oscillator.type = 'sine' // Or square, triangle, sawtooth, custom
     this.oscillator.frequency.value = 172.3
-    this.oscillator.connect(this.destination)
+    this.oscillator.connect(destination)
     this.oscillator.start()
   }
 

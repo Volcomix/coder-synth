@@ -1,5 +1,5 @@
 <template>
-  <VCard>
+  <VCard v-if="effectNames.length">
     <VCardText class="mt-3 ml-3 pt-3 pl-3 pb-0 pr-0">
       <VLayout wrap>
         <template v-for="effectName in effectNames">

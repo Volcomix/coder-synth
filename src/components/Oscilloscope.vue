@@ -18,10 +18,14 @@ export default {
   },
   computed: {
     bufferLength() {
-      return this.analyser.frequencyBinCount
+      if (this.analyser) {
+        return this.analyser.frequencyBinCount
+      } else {
+        return 2
+      }
     },
     dataArray() {
-      return new Uint8Array(this.bufferLength)
+      return Uint8Array.from({ length: this.bufferLength }, () => 128)
     },
   },
   mounted() {
@@ -41,12 +45,14 @@ export default {
     },
     draw() {
       requestAnimationFrame(this.draw)
-      this.analyser.getByteTimeDomainData(this.dataArray)
+      if (this.analyser) {
+        this.analyser.getByteTimeDomainData(this.dataArray)
+      }
       this.context.clearRect(0, 0, this.width, this.height)
       this.context.lineWidth = 2
       this.context.strokeStyle = this.$vuetify.theme.primary
       this.context.beginPath()
-      const sliceWidth = (this.width * 1) / this.bufferLength
+      const sliceWidth = this.width / (this.bufferLength - 1)
       let x = 0
       for (let i = 0; i < this.bufferLength; i++) {
         const v = this.dataArray[i] / 128

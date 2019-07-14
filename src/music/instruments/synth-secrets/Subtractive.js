@@ -1,20 +1,24 @@
 import Instrument from '../../common/Instrument'
 
 export default class Part1Subtractive extends Instrument {
-  start() {
-    this.oscillator = this.audioContext.createOscillator()
+  /**
+   * @param {AudioContext} audioContext
+   * @param {AudioDestinationNode} destination
+   */
+  start(audioContext, destination) {
+    this.oscillator = audioContext.createOscillator()
     this.oscillator.type = 'square'
     this.oscillator.frequency.value = 110 + (880 * 18) / 255
 
-    this.filter = this.audioContext.createBiquadFilter()
+    this.filter = audioContext.createBiquadFilter()
     this.filter.frequency.value = 110 + (2 * 2 * 2 * 440 * 34) / 255
 
-    this.gain = this.audioContext.createGain()
+    this.gain = audioContext.createGain()
     this.gain.gain.value = (2 * 95) / 255
 
     this.oscillator.connect(this.filter)
     this.filter.connect(this.gain)
-    this.gain.connect(this.destination)
+    this.gain.connect(destination)
 
     this.oscillator.start()
   }

@@ -2,18 +2,22 @@ import Instrument from '../../common/Instrument'
 import noteFrequencies from '../../common/noteFrequencies'
 
 export default class Scream extends Instrument {
-  start() {
-    this.vco = this.audioContext.createOscillator()
+  /**
+   * @param {AudioContext} audioContext
+   * @param {AudioDestinationNode} destination
+   */
+  start(audioContext, destination) {
+    this.vco = audioContext.createOscillator()
     this.vco.type = 'square'
 
-    this.mmg = this.audioContext.createBiquadFilter()
+    this.mmg = audioContext.createBiquadFilter()
     this.mmg.type = 'lowpass'
 
-    this.vca1 = this.audioContext.createGain()
+    this.vca1 = audioContext.createGain()
 
-    this.feedback = this.audioContext.createGain()
+    this.feedback = audioContext.createGain()
 
-    this.vca2 = this.audioContext.createGain()
+    this.vca2 = audioContext.createGain()
 
     this.vco.connect(this.mmg)
     this.mmg.connect(this.vca1)
@@ -21,7 +25,7 @@ export default class Scream extends Instrument {
     this.feedback.connect(this.feedback)
     this.feedback.connect(this.vco.frequency)
     this.feedback.connect(this.vca2)
-    this.vca2.connect(this.destination)
+    this.vca2.connect(destination)
 
     this.vco.start()
   }

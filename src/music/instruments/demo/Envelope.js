@@ -7,13 +7,17 @@ export default class Envelope extends Instrument {
   decayDuration = 0.2
   releaseDuration = 0.5
 
-  start() {
-    this.oscillator = this.audioContext.createOscillator()
+  /**
+   * @param {AudioContext} audioContext
+   * @param {AudioDestinationNode} destination
+   */
+  start(audioContext, destination) {
+    this.oscillator = audioContext.createOscillator()
     this.oscillator.frequency.value = 172.3
-    this.gain = this.audioContext.createGain()
+    this.gain = audioContext.createGain()
     this.gain.gain.value = 1
     this.oscillator.connect(this.gain)
-    this.gain.connect(this.destination)
+    this.gain.connect(destination)
     this.oscillator.start()
   }
 

@@ -2,20 +2,24 @@ import Instrument from '../../common/Instrument'
 import noteFrequencies from '../../common/noteFrequencies'
 
 export default class Feedback extends Instrument {
-  start() {
-    this.vco = this.audioContext.createOscillator()
+  /**
+   * @param {AudioContext} audioContext
+   * @param {AudioDestinationNode} destination
+   */
+  start(audioContext, destination) {
+    this.vco = audioContext.createOscillator()
     this.vco.type = 'square'
 
-    this.vca = this.audioContext.createGain()
+    this.vca = audioContext.createGain()
     this.vca.gain.value = 1
 
-    this.feedback = this.audioContext.createGain()
+    this.feedback = audioContext.createGain()
     this.feedback.gain.value = 0.5
 
     this.vco.connect(this.vca)
     this.vca.connect(this.feedback)
     this.feedback.connect(this.feedback)
-    this.feedback.connect(this.destination)
+    this.feedback.connect(destination)
 
     this.vco.start()
   }

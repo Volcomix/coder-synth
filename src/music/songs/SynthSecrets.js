@@ -11,10 +11,10 @@ export default class SynthSecrets extends Song {
   notesPerBeat = 2
   tracks = {
     Subtractive: {
-      instrument: new Subtractive(this.audioContext, this.destination),
+      instrument: new Subtractive(),
     },
     Envelope: {
-      instrument: new Envelope(this.audioContext, this.destination),
+      instrument: new Envelope(),
       notes: `
         OFF C-4 E-4 F-4 G-4 --- --- ---
         OFF C-4 E-4 F-4 G-4 --- --- ---
@@ -29,7 +29,7 @@ export default class SynthSecrets extends Song {
       `,
     },
     Formant: {
-      instrument: new Formant(this.audioContext, this.destination),
+      instrument: new Formant(),
       notes: 'F-3',
       effects: {
         vowel: '0',
@@ -37,7 +37,7 @@ export default class SynthSecrets extends Song {
       },
     },
     Speech: {
-      instrument: new Speech(this.audioContext, this.destination),
+      instrument: new Speech(),
       notes: `
         E-2 F-2 G-2 A-2 --- F-2 G-2 OFF
         A-2 --- G-2 F-2 --- --- OFF ---
@@ -68,10 +68,10 @@ export default class SynthSecrets extends Song {
       },
     },
     Scream: {
-      instrument: new Scream(this.audioContext, this.destination),
+      instrument: new Scream(),
     },
     Feedback: {
-      instrument: new Feedback(this.audioContext, this.destination),
+      instrument: new Feedback(),
     },
   }
 }

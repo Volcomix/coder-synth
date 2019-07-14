@@ -12,20 +12,24 @@ export default class Speech extends Instrument {
 
   stopped = true
 
-  start() {
-    this.oscillator = this.audioContext.createOscillator()
+  /**
+   * @param {AudioContext} audioContext
+   * @param {AudioDestinationNode} destination
+   */
+  start(audioContext, destination) {
+    this.oscillator = audioContext.createOscillator()
     this.oscillator.type = 'sawtooth'
 
-    this.envelope = this.audioContext.createGain()
+    this.envelope = audioContext.createGain()
     this.envelope.gain.value = 0
 
-    this.volume = this.audioContext.createGain()
+    this.volume = audioContext.createGain()
 
     this.formants = Array.from({ length: this.formantCount }, () => {
-      const bpf = this.audioContext.createBiquadFilter()
+      const bpf = audioContext.createBiquadFilter()
       bpf.type = 'bandpass'
 
-      const vca = this.audioContext.createGain()
+      const vca = audioContext.createGain()
 
       this.oscillator.connect(bpf)
       bpf.connect(vca)
@@ -35,7 +39,7 @@ export default class Speech extends Instrument {
     })
 
     this.envelope.connect(this.volume)
-    this.volume.connect(this.destination)
+    this.volume.connect(destination)
 
     this.oscillator.start()
   }

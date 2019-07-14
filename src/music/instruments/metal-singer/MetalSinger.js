@@ -1,58 +1,58 @@
 import Instrument from '../../common/Instrument'
 import noteFrequencies from '../../common/noteFrequencies'
 
-export default class MetalSingerA extends Instrument {
-  start() {
+export default class MetalSinger extends Instrument {
+  /**
+   * @param {AudioContext} audioCtx
+   * @param {AudioDestinationNode} destination
+   */
+  start(audioCtx, destination) {
     const noiseLength = 2
-    const bufferSize = this.audioContext.sampleRate * noiseLength
-    const buffer = this.audioContext.createBuffer(
-      1,
-      bufferSize,
-      this.audioContext.sampleRate,
-    )
+    const bufferSize = audioCtx.sampleRate * noiseLength
+    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate)
     const data = buffer.getChannelData(0)
     for (let i = 0; i < bufferSize; i++) {
       data[i] = Math.random() * 2 - 1
     }
-    this.noise = this.audioContext.createBufferSource()
+    this.noise = audioCtx.createBufferSource()
     this.noise.buffer = buffer
     this.noise.loop = true
 
-    this.noiseGain = this.audioContext.createGain()
+    this.noiseGain = audioCtx.createGain()
     this.noiseGain.gain.value = 0.12
 
-    this.noiseMod = this.audioContext.createGain()
+    this.noiseMod = audioCtx.createGain()
     this.noiseMod.gain.value = 0
 
-    this.osc = this.audioContext.createOscillator()
+    this.osc = audioCtx.createOscillator()
     this.osc.type = 'sawtooth'
     this.osc.frequency.value = noteFrequencies['F-3']
 
-    this.f1Filter = this.audioContext.createBiquadFilter()
+    this.f1Filter = audioCtx.createBiquadFilter()
     this.f1Filter.type = 'bandpass'
     this.f1Filter.frequency.value = this.f1Freq = 750
     this.f1Filter.Q.value = this.bwToQ(80, this.f1Freq)
 
-    this.f1Gain = this.audioContext.createGain()
+    this.f1Gain = audioCtx.createGain()
     this.f1Gain.gain.value = this.ampToGain(0)
 
-    this.f2Filter = this.audioContext.createBiquadFilter()
+    this.f2Filter = audioCtx.createBiquadFilter()
     this.f2Filter.type = 'bandpass'
     this.f2Filter.frequency.value = this.f2Freq = 1150
     this.f2Filter.Q.value = this.bwToQ(90, this.f2Freq)
 
-    this.f2Gain = this.audioContext.createGain()
+    this.f2Gain = audioCtx.createGain()
     this.f2Gain.gain.value = this.ampToGain(-4)
 
-    this.distortion = this.audioContext.createWaveShaper()
+    this.distortion = audioCtx.createWaveShaper()
     this.distortion.curve = this.makeDistortionCurve(400)
 
-    this.filter = this.audioContext.createBiquadFilter()
+    this.filter = audioCtx.createBiquadFilter()
     this.filter.type = 'lowshelf'
     this.filter.frequency.value = 340
     this.filter.gain.value = 5
 
-    this.mixer = this.audioContext.createGain()
+    this.mixer = audioCtx.createGain()
     this.mixer.gain.value = this.mixerToGain(50)
 
     this.noise.connect(this.noiseGain)
@@ -73,7 +73,7 @@ export default class MetalSingerA extends Instrument {
     this.distortion.connect(this.filter)
     this.filter.connect(this.mixer)
 
-    this.mixer.connect(this.destination)
+    this.mixer.connect(destination)
 
     this.noise.start()
     this.osc.start()

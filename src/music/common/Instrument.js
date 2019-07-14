@@ -1,18 +1,9 @@
 import noteFrequencies from './noteFrequencies'
 
 export default class Instrument {
-  /**
-   * @param {AudioContext} audioContext
-   * @param {AudioDestinationNode} destination
-   */
-  constructor(audioContext, destination) {
-    this.audioContext = audioContext
-    this.destination = destination
-  }
-
-  play(notes, effects, timePerNote) {
-    this.start()
-    let noteTime = this.audioContext.currentTime
+  play(notes, effects, timePerNote, audioContext, destination) {
+    this.start(audioContext, destination)
+    let noteTime = audioContext.currentTime
     for (let noteIndex = 0; noteIndex < notes.length; noteIndex++) {
       const noteName = notes[noteIndex]
       if (noteName === 'OFF') {

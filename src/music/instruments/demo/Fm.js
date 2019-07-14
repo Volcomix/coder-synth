@@ -1,19 +1,23 @@
 import Instrument from '../../common/Instrument'
 
 export default class Fm extends Instrument {
-  start() {
-    this.oscillator1 = this.audioContext.createOscillator()
+  /**
+   * @param {AudioContext} audioContext
+   * @param {AudioDestinationNode} destination
+   */
+  start(audioContext, destination) {
+    this.oscillator1 = audioContext.createOscillator()
     this.oscillator1.frequency.value = 220
 
-    this.oscillator2 = this.audioContext.createOscillator()
+    this.oscillator2 = audioContext.createOscillator()
     this.oscillator2.frequency.value = 440
 
-    this.modulationGain = this.audioContext.createGain()
+    this.modulationGain = audioContext.createGain()
     this.modulationGain.gain.value = 50
 
     this.oscillator1.connect(this.modulationGain)
     this.modulationGain.connect(this.oscillator2.frequency)
-    this.oscillator2.connect(this.destination)
+    this.oscillator2.connect(destination)
 
     this.oscillator1.start()
     this.oscillator2.start()

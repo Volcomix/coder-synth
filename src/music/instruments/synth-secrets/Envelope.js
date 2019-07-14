@@ -6,16 +6,20 @@ export default class Part3Envelope extends Instrument {
   sustain = 59 / 255
   release = 118 / 255
 
-  start() {
-    this.oscillator = this.audioContext.createOscillator()
-    this.envelope = this.audioContext.createGain()
+  /**
+   * @param {AudioContext} audioContext
+   * @param {AudioDestinationNode} destination
+   */
+  start(audioContext, destination) {
+    this.oscillator = audioContext.createOscillator()
+    this.envelope = audioContext.createGain()
     this.envelope.gain.value = 0
-    this.volume = this.audioContext.createGain()
+    this.volume = audioContext.createGain()
     this.volume.gain.value = (2 * 176) / 255
 
     this.oscillator.connect(this.envelope)
     this.envelope.connect(this.volume)
-    this.volume.connect(this.destination)
+    this.volume.connect(destination)
 
     this.oscillator.start()
   }

@@ -4,59 +4,63 @@ import noteFrequencies from '../../common/noteFrequencies'
 export default class StringMachines extends Instrument {
   pulseCurve = Float32Array.from({ length: 256 }, (_, i) => (i < 128 ? -1 : 1))
 
-  start() {
-    this.key = this.audioContext.createConstantSource()
+  /**
+   * @param {AudioContext} audioContext
+   * @param {AudioDestinationNode} destination
+   */
+  start(audioContext, destination) {
+    this.key = audioContext.createConstantSource()
 
-    this.osc = this.audioContext.createOscillator()
+    this.osc = audioContext.createOscillator()
     this.osc.type = 'sawtooth'
     this.osc.frequency.value = 0
 
-    this.oscDetuned = this.audioContext.createOscillator()
+    this.oscDetuned = audioContext.createOscillator()
     this.oscDetuned.type = 'sawtooth'
     this.oscDetuned.frequency.value = 0
     this.oscDetuned.detune.value = -1204
 
-    this.pulseWidth = this.audioContext.createConstantSource()
+    this.pulseWidth = audioContext.createConstantSource()
     this.pulseWidth.offset.value = 0.275
 
-    this.lfo1 = this.audioContext.createOscillator()
+    this.lfo1 = audioContext.createOscillator()
     this.lfo1.type = 'triangle'
     this.lfo1.frequency.value = 5
 
-    this.lfo2 = this.audioContext.createOscillator()
+    this.lfo2 = audioContext.createOscillator()
     this.lfo2.type = 'triangle'
     this.lfo2.frequency.value = 6
 
-    this.oscMod = this.audioContext.createGain()
+    this.oscMod = audioContext.createGain()
     this.oscMod.gain.value = 4
 
-    this.pwmMod = this.audioContext.createGain()
+    this.pwmMod = audioContext.createGain()
     this.pwmMod.gain.value = 0.45
 
-    this.pulse = this.audioContext.createWaveShaper()
+    this.pulse = audioContext.createWaveShaper()
     this.pulse.curve = this.pulseCurve
 
-    this.pulseDetuned = this.audioContext.createWaveShaper()
+    this.pulseDetuned = audioContext.createWaveShaper()
     this.pulseDetuned.curve = this.pulseCurve
 
-    this.lpf = this.audioContext.createBiquadFilter()
+    this.lpf = audioContext.createBiquadFilter()
     this.lpf.type = 'lowpass'
     this.lpf.frequency.value = (8000 * 80) / 255
     this.lpf.Q.value = (50 * 15) / 255
 
-    this.lpfKeyFollow = this.audioContext.createGain()
+    this.lpfKeyFollow = audioContext.createGain()
     this.lpfKeyFollow.gain.value = (10 * 110) / 255
 
-    this.envelope = this.audioContext.createGain()
+    this.envelope = audioContext.createGain()
     this.envelope.gain.value = 0
 
-    this.chorusMod = this.audioContext.createGain()
+    this.chorusMod = audioContext.createGain()
     this.chorusMod.gain.value = (0.01 * 8) / 255
 
-    this.chorusDelay = this.audioContext.createDelay()
+    this.chorusDelay = audioContext.createDelay()
     this.chorusDelay.delayTime.value = 15 / 255
 
-    this.volume = this.audioContext.createGain()
+    this.volume = audioContext.createGain()
     this.volume.gain.value = 1
 
     this.key.connect(this.osc.frequency)
@@ -90,7 +94,7 @@ export default class StringMachines extends Instrument {
     this.chorusDelay.connect(this.volume)
     this.envelope.connect(this.volume)
 
-    this.volume.connect(this.destination)
+    this.volume.connect(destination)
 
     this.key.start()
     this.osc.start()
@@ -111,7 +115,7 @@ export default class StringMachines extends Instrument {
 
   noteOn(noteFrequency, time) {
     this.key.offset.setValueAtTime(noteFrequency, time)
-    if (time > 0) {
+    if (time > 0.05) {
       this.envelope.gain.setTargetAtTime(0, time - 0.05, 0.05)
     }
     this.envelope.gain.setValueAtTime(0, time)

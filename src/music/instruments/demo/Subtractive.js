@@ -1,25 +1,29 @@
 import Instrument from '../../common/Instrument'
 
 export default class Subtractive extends Instrument {
-  start() {
-    const bufferSize = this.audioContext.sampleRate * 60
-    const sampleRate = this.audioContext.sampleRate
-    const buffer = this.audioContext.createBuffer(1, bufferSize, sampleRate)
+  /**
+   * @param {AudioContext} audioContext
+   * @param {AudioDestinationNode} destination
+   */
+  start(audioContext, destination) {
+    const bufferSize = audioContext.sampleRate * 60
+    const sampleRate = audioContext.sampleRate
+    const buffer = audioContext.createBuffer(1, bufferSize, sampleRate)
     const data = buffer.getChannelData(0)
     for (let i = 0; i < bufferSize; i++) {
       data[i] = Math.random() * 2 - 1
     }
 
-    this.noise = this.audioContext.createBufferSource()
+    this.noise = audioContext.createBufferSource()
     this.noise.buffer = buffer
 
-    this.filter = this.audioContext.createBiquadFilter()
+    this.filter = audioContext.createBiquadFilter()
     this.filter.type = 'lowpass'
     this.filter.frequency.value = 440
     this.filter.Q.value = 20
 
     this.noise.connect(this.filter)
-    this.filter.connect(this.destination)
+    this.filter.connect(destination)
 
     this.noise.start()
   }

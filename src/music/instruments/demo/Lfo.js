@@ -1,19 +1,23 @@
 import Instrument from '../../common/Instrument'
 
 export default class Lfo extends Instrument {
-  start() {
-    this.lfo = this.audioContext.createOscillator()
+  /**
+   * @param {AudioContext} audioContext
+   * @param {AudioDestinationNode} destination
+   */
+  start(audioContext, destination) {
+    this.lfo = audioContext.createOscillator()
     this.lfo.frequency.value = 1
 
-    this.oscillator = this.audioContext.createOscillator()
+    this.oscillator = audioContext.createOscillator()
     this.oscillator.frequency.value = 440
 
-    this.modulationGain = this.audioContext.createGain()
+    this.modulationGain = audioContext.createGain()
     this.modulationGain.gain.value = 50
 
     this.lfo.connect(this.modulationGain)
     this.modulationGain.connect(this.oscillator.detune)
-    this.oscillator.connect(this.destination)
+    this.oscillator.connect(destination)
 
     this.lfo.start()
     this.oscillator.start()
