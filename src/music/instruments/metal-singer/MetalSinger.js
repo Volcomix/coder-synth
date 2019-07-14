@@ -1,58 +1,51 @@
 import Instrument from '../../common/Instrument'
 import noteFrequencies from '../../common/noteFrequencies'
+import NoiseNode from '../../nodes/NoiseNode'
 
 export default class MetalSinger extends Instrument {
   /**
-   * @param {AudioContext} audioCtx
+   * @param {AudioContext} context
    * @param {AudioDestinationNode} destination
    */
-  start(audioCtx, destination) {
-    const noiseLength = 2
-    const bufferSize = audioCtx.sampleRate * noiseLength
-    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate)
-    const data = buffer.getChannelData(0)
-    for (let i = 0; i < bufferSize; i++) {
-      data[i] = Math.random() * 2 - 1
-    }
-    this.noise = audioCtx.createBufferSource()
-    this.noise.buffer = buffer
+  start(context, destination) {
+    this.noise = new NoiseNode(context)
     this.noise.loop = true
 
-    this.noiseGain = audioCtx.createGain()
+    this.noiseGain = context.createGain()
     this.noiseGain.gain.value = 0.12
 
-    this.noiseMod = audioCtx.createGain()
+    this.noiseMod = context.createGain()
     this.noiseMod.gain.value = 0
 
-    this.osc = audioCtx.createOscillator()
+    this.osc = context.createOscillator()
     this.osc.type = 'sawtooth'
     this.osc.frequency.value = noteFrequencies['F-3']
 
-    this.f1Filter = audioCtx.createBiquadFilter()
+    this.f1Filter = context.createBiquadFilter()
     this.f1Filter.type = 'bandpass'
     this.f1Filter.frequency.value = this.f1Freq = 750
     this.f1Filter.Q.value = this.bwToQ(80, this.f1Freq)
 
-    this.f1Gain = audioCtx.createGain()
+    this.f1Gain = context.createGain()
     this.f1Gain.gain.value = this.ampToGain(0)
 
-    this.f2Filter = audioCtx.createBiquadFilter()
+    this.f2Filter = context.createBiquadFilter()
     this.f2Filter.type = 'bandpass'
     this.f2Filter.frequency.value = this.f2Freq = 1150
     this.f2Filter.Q.value = this.bwToQ(90, this.f2Freq)
 
-    this.f2Gain = audioCtx.createGain()
+    this.f2Gain = context.createGain()
     this.f2Gain.gain.value = this.ampToGain(-4)
 
-    this.distortion = audioCtx.createWaveShaper()
+    this.distortion = context.createWaveShaper()
     this.distortion.curve = this.makeDistortionCurve(400)
 
-    this.filter = audioCtx.createBiquadFilter()
+    this.filter = context.createBiquadFilter()
     this.filter.type = 'lowshelf'
     this.filter.frequency.value = 340
     this.filter.gain.value = 5
 
-    this.mixer = audioCtx.createGain()
+    this.mixer = context.createGain()
     this.mixer.gain.value = this.mixerToGain(50)
 
     this.noise.connect(this.noiseGain)
