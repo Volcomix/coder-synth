@@ -5,6 +5,7 @@ import Formant from '../instruments/synth-secrets/Formant'
 import Speech from '../instruments/synth-secrets/Speech'
 import Scream from '../instruments/synth-secrets/Scream'
 import Feedback from '../instruments/synth-secrets/Feedback'
+import Pwm from '../instruments/synth-secrets/Pwm'
 
 export default class SynthSecrets extends Song {
   tempo = 120
@@ -72,6 +73,9 @@ export default class SynthSecrets extends Song {
     },
     Feedback: {
       instrument: new Feedback(),
+    },
+    Pwm: {
+      instrument: new Pwm(),
     },
   }
 }
