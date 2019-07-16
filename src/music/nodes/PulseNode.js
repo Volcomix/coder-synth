@@ -1,49 +1,44 @@
 const curve = Float32Array.from({ length: 256 }, (_, i) => (i < 128 ? -1 : 1))
 
-export default class PulseNode {
+export default class PulseNode extends OscillatorNode {
   /**
    * @param {AudioContext} context
    */
   constructor(context) {
-    const oscillator = context.createOscillator()
-    oscillator.type = 'sawtooth'
+    super(context)
+    Object.setPrototypeOf(this, PulseNode.prototype)
 
-    const constant = context.createConstantSource()
-    constant.offset.value = 0
+    super.type = 'sawtooth'
 
-    const shaper = context.createWaveShaper()
-    shaper.curve = curve
+    this.constant = context.createConstantSource()
+    this.constant.offset.value = 0
 
-    oscillator.connect(shaper)
-    constant.connect(shaper)
+    this.shaper = context.createWaveShaper()
+    this.shaper.curve = curve
 
-    Object.defineProperty(oscillator, 'width', {
-      get() {
-        return constant.offset
-      },
-    })
+    super.connect(this.shaper)
+    this.constant.connect(this.shaper)
+  }
 
-    const start = oscillator.start.bind(oscillator)
-    const stop = oscillator.stop.bind(oscillator)
+  get width() {
+    return this.constant.offset
+  }
 
-    oscillator.start = (...args) => {
-      start(...args)
-      constant.start(...args)
-    }
+  start(...args) {
+    super.start(...args)
+    this.constant.start(...args)
+  }
 
-    oscillator.stop = (...args) => {
-      stop(...args)
-      constant.stop(...args)
-    }
+  stop(...args) {
+    super.stop(...args)
+    this.constant.stop(...args)
+  }
 
-    oscillator.connect = (...args) => {
-      shaper.connect(...args)
-    }
+  connect(...args) {
+    this.shaper.connect(...args)
+  }
 
-    oscillator.disconnect = (...args) => {
-      shaper.disconnect(...args)
-    }
-
-    return oscillator
+  disconnect(...args) {
+    this.shaper.disconnect(...args)
   }
 }
