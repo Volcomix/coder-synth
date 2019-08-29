@@ -1,20 +1,13 @@
 import Vue from 'vue'
-import Vuetify from 'vuetify'
-import 'vuetify/dist/vuetify.min.css'
 import App from './App'
 import router from './router'
 import store from './store'
+import vuetify from './vuetify'
 
 Vue.config.productionTip = false
 
-Vue.use(Vuetify, {
-  theme: {
-    primary: '#f26223',
-    secondary: '#2a2e33',
-  },
-})
-
 new Vue({
+  vuetify,
   router,
   store,
   render: h => h(App),

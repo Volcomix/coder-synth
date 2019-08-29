@@ -1,9 +1,9 @@
 <template>
   <VApp>
     <SongsDrawer v-model="drawer" />
-    <VToolbar dark color="secondary">
-      <VToolbarSideIcon @click="drawer = !drawer" />
-      <VToolbarTitle class="white--text">{{ songName }}</VToolbarTitle>
+    <VAppBar app dark color="secondary">
+      <VAppBarNavIcon @click="drawer = !drawer" />
+      <VToolbarTitle class="white--text mr-2">{{ songName }}</VToolbarTitle>
       <VBtn v-if="isPlaying" icon @click="stop">
         <VIcon color="primary">stop</VIcon>
       </VBtn>
@@ -11,17 +11,20 @@
         <VIcon>play_arrow</VIcon>
       </VBtn>
       <VSpacer />
-      <TracksMenu :song="song" :trackName="trackName" />
-    </VToolbar>
+      <TracksMenu :song="song" :track-name="trackName" />
+    </VAppBar>
     <VContent>
-      <VLayout fill-height column>
+      <VContainer
+        class="fill-height pa-0 d-flex flex-column align-stretch"
+        fluid
+      >
         <Oscilloscope :key="`${songName}-${trackName}`" :analyser="analyser" />
         <TrackEffects
           v-if="instrument"
           :instrument="instrument"
-          :isPlaying="isPlaying"
+          :is-playing="isPlaying"
         />
-      </VLayout>
+      </VContainer>
     </VContent>
   </VApp>
 </template>

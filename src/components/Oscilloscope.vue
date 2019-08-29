@@ -1,7 +1,7 @@
 <template>
-  <VFlex ref="oscilloscope" class="oscilloscope" my-3 v-resize="resize">
+  <VRow ref="oscilloscope" v-resize="resize" class="oscilloscope my-3">
     <canvas ref="canvas" class="canvas" :width="width" :height="height" />
-  </VFlex>
+  </VRow>
 </template>
 
 <script>
@@ -50,7 +50,7 @@ export default {
       }
       this.context.clearRect(0, 0, this.width, this.height)
       this.context.lineWidth = 2
-      this.context.strokeStyle = this.$vuetify.theme.primary
+      this.context.strokeStyle = this.$vuetify.theme.themes.light.primary
       this.context.beginPath()
       const sliceWidth = this.width / (this.bufferLength - 1)
       let x = 0

@@ -8,16 +8,16 @@
       </VToolbarTitle>
     </template>
     <VList>
-      <VListTile :to="{ params: { trackName: null } }" exact>
-        <VListTileTitle>All tracks</VListTileTitle>
-      </VListTile>
-      <VListTile
+      <VListItem :to="{ params: { trackName: null } }" exact>
+        <VListItemTitle>All tracks</VListItemTitle>
+      </VListItem>
+      <VListItem
         v-for="(_, name) in song.tracks"
         :key="name"
         :to="{ params: { trackName: name } }"
       >
-        <VListTileTitle>{{ name }}</VListTileTitle>
-      </VListTile>
+        <VListItemTitle>{{ name }}</VListItemTitle>
+      </VListItem>
     </VList>
   </VMenu>
 </template>

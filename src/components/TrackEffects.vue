@@ -1,21 +1,27 @@
 <template>
   <VCard v-if="effectNames.length">
     <VCardText class="mt-3 ml-3 pt-3 pl-3 pb-0 pr-0">
-      <VLayout wrap>
+      <VRow>
         <template v-for="effectName in effectNames">
-          <VFlex :key="`slider-${effectName}`" xs8 md4 xl2>
+          <VCol :key="`slider-${effectName}`" cols="8" md="4" xl="2">
             <VSlider
               thumb-label="always"
               :max="255"
               @input="setEffect(effectName, $event)"
             >
             </VSlider>
-          </VFlex>
-          <VFlex :key="`label-${effectName}`" xs4 md2 xl1 pt-2>
+          </VCol>
+          <VCol
+            :key="`label-${effectName}`"
+            class="pt-2"
+            cols="4"
+            md="2"
+            xl="1"
+          >
             <VSubheader>{{ effectName }}</VSubheader>
-          </VFlex>
+          </VCol>
         </template>
-      </VLayout>
+      </VRow>
     </VCardText>
   </VCard>
 </template>
