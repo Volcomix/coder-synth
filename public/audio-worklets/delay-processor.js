@@ -1,7 +1,20 @@
 class DelayProcessor extends AudioWorkletProcessor {
-  M = Math.round(44100 / 8)
-  D = Array.from({ length: this.M }, () => 0)
-  ptr = 0
+  N = 4096
+  A = Array.from({ length: this.N }, () => 0)
+  rptr = 4096 - Math.round(44100 / 220) + 128
+  wptr = 0
+
+  static get parameterDescriptors() {
+    return [
+      {
+        name: 'delaySamples',
+        defaultValue: 1,
+        minValue: 1,
+        maxValue: 4096,
+        automationRate: 'a-rate',
+      },
+    ]
+  }
 
   process(inputs, outputs) {
     const input = inputs[0]
@@ -11,10 +24,13 @@ class DelayProcessor extends AudioWorkletProcessor {
     const outputChannel = output[0]
 
     for (let i = 0; i < inputChannel.length; i++) {
-      const y = this.D[this.ptr]
-      this.D[this.ptr++] = inputChannel[i]
-      if (this.ptr >= this.M) {
-        this.ptr -= this.M
+      this.A[this.wptr++] = inputChannel[i]
+      const y = this.A[this.rptr++]
+      if (this.wptr >= this.N) {
+        this.wptr -= this.N
+      }
+      if (this.rptr >= this.N) {
+        this.rptr -= this.N
       }
       outputChannel[i] = y
     }
