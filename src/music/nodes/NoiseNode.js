@@ -2,7 +2,7 @@ export default class NoiseNode extends AudioBufferSourceNode {
   /**
    * @param {AudioContext} context
    */
-  constructor(context, noiseLength = 2) {
+  constructor(context, noiseLength = 2, loop = true) {
     super(context)
     const bufferSize = context.sampleRate * noiseLength
     const buffer = context.createBuffer(1, bufferSize, context.sampleRate)
@@ -11,5 +11,6 @@ export default class NoiseNode extends AudioBufferSourceNode {
       data[i] = Math.random() * 2 - 1
     }
     this.buffer = buffer
+    this.loop = loop
   }
 }

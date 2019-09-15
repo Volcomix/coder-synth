@@ -9,7 +9,6 @@ export default class MetalSinger extends Instrument {
    */
   start(context, destination) {
     this.noise = new NoiseNode(context)
-    this.noise.loop = true
 
     this.noiseGain = context.createGain()
     this.noiseGain.gain.value = 0.12
