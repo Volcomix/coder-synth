@@ -1,26 +1,22 @@
 <template>
   <VCard v-if="effectNames.length">
-    <VCardText class="mt-3 ml-3 pt-3 pl-3 pb-0 pr-0">
-      <VRow>
-        <template v-for="effectName in effectNames">
-          <VCol :key="`slider-${effectName}`" cols="8" md="4" xl="2">
-            <VSlider
-              thumb-label="always"
-              :max="255"
-              @input="setEffect(effectName, $event)"
-            >
-            </VSlider>
-          </VCol>
-          <VCol
-            :key="`label-${effectName}`"
-            class="pt-2"
-            cols="4"
-            md="2"
-            xl="1"
+    <VCardText>
+      <VRow dense>
+        <VCol
+          v-for="effectName in effectNames"
+          :key="effectName"
+          cols="12"
+          md="6"
+          xl="3"
+        >
+          <VSlider
+            thumb-label
+            :max="255"
+            :label="effectName"
+            @input="setEffect(effectName, $event)"
           >
-            <VSubheader>{{ effectName }}</VSubheader>
-          </VCol>
-        </template>
+          </VSlider>
+        </VCol>
       </VRow>
     </VCardText>
   </VCard>
@@ -54,9 +50,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-.slider {
-  width: 300px;
-}
-</style>
