@@ -29,7 +29,9 @@
 import songs from '../music/songs'
 
 export default {
-  props: ['value'],
+  props: {
+    value: Boolean,
+  },
   computed: {
     songs() {
       return songs

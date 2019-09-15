@@ -27,8 +27,14 @@ import Song from '../music/common/Song'
 
 export default {
   props: {
-    song: Song,
-    trackName: String,
+    song: {
+      type: Song,
+      required: true,
+    },
+    trackName: {
+      type: String,
+      default: null,
+    },
   },
 }
 </script>

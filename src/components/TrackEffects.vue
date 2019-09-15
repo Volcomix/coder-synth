@@ -27,7 +27,10 @@ import Instrument from '../music/common/Instrument'
 
 export default {
   props: {
-    instrument: Instrument,
+    instrument: {
+      type: Instrument,
+      required: true,
+    },
     isPlaying: Boolean,
   },
   computed: {
