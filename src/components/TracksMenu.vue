@@ -1,13 +1,13 @@
 <template>
   <VMenu :nudge-width="100">
-    <template v-slot:activator="{ on }">
-      <VToolbarTitle v-on="on">
-        <span v-if="trackName">{{ trackName }}</span>
-        <span v-else>All tracks</span>
-        <VIcon dark>arrow_drop_down</VIcon>
-      </VToolbarTitle>
+    <template #activator="{ on: menu }">
+      <VBtn class="body-1 text-none" text v-on="menu">
+        <span>{{ trackName || 'All tracks' }}</span>
+        <VIcon dark>mdi-menu-down</VIcon>
+      </VBtn>
     </template>
     <VList dense nav>
+      <VSubheader>Select a track</VSubheader>
       <VListItemGroup color="primary">
         <VListItem :to="{ params: { trackName: null } }" exact>
           <VListItemTitle>All tracks</VListItemTitle>

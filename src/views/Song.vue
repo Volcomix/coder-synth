@@ -5,13 +5,15 @@
       <VAppBarNavIcon @click="drawer = !drawer" />
       <VToolbarTitle class="white--text mr-2">{{ songName }}</VToolbarTitle>
       <VBtn v-if="isPlaying" icon @click="stop">
-        <VIcon color="primary">stop</VIcon>
+        <VIcon color="primary">mdi-stop</VIcon>
       </VBtn>
       <VBtn v-else icon @click="play">
-        <VIcon>play_arrow</VIcon>
+        <VIcon>mdi-play</VIcon>
       </VBtn>
       <VSpacer />
-      <TracksMenu :song="song" :track-name="trackName" />
+      <VToolbarItems>
+        <TracksMenu :song="song" :track-name="trackName" />
+      </VToolbarItems>
     </VAppBar>
     <VContent>
       <VContainer

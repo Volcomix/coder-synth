@@ -74,7 +74,7 @@ export default class SynthSecrets extends Song {
     Feedback: {
       instrument: new Feedback(),
     },
-    Pwm: {
+    PWM: {
       instrument: new Pwm(),
     },
   }

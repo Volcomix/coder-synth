@@ -7,11 +7,12 @@
   >
     <VListItem>
       <VListItemContent>
-        <VListItemTitle class="title">Songs</VListItemTitle>
+        <VListItemTitle class="title">Coder Synth</VListItemTitle>
       </VListItemContent>
     </VListItem>
     <VDivider />
     <VList dense nav>
+      <VSubheader>Select a song</VSubheader>
       <VListItemGroup color="primary">
         <VListItem
           v-for="(Song, songName) in songs"
