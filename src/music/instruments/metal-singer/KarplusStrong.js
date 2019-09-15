@@ -47,8 +47,6 @@ export default class KarplusStrong extends Instrument {
     this.noiseBurst.gain.setValueAtTime(0, time + 1 / frequency)
   }
 
-  noteOff(time) {}
-
   fxFilter(frequency, time) {
     this.feedbackFilter.frequency.setValueAtTime(frequency * 100, time)
   }
