@@ -5,17 +5,13 @@
     :value="value"
     @input="$emit('input', $event)"
   >
-    <VAppBar flat>
-      <VList>
-        <VListItem>
-          <VListItemContent>
-            <VListItemTitle class="title">Songs</VListItemTitle>
-          </VListItemContent>
-        </VListItem>
-      </VList>
-    </VAppBar>
+    <VListItem>
+      <VListItemContent>
+        <VListItemTitle class="title">Songs</VListItemTitle>
+      </VListItemContent>
+    </VListItem>
     <VDivider />
-    <VList>
+    <VList dense nav>
       <VListItem
         v-for="(Song, songName) in songs"
         :key="songName"
