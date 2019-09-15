@@ -48,7 +48,10 @@ export default class KarplusStrong extends Instrument {
   }
 
   fxFilter(frequency, time) {
-    this.feedbackFilter.frequency.setValueAtTime(frequency * 100, time)
+    this.feedbackFilter.frequency.setValueAtTime(
+      Math.min(frequency * 100, 22050),
+      time,
+    )
   }
 
   fxFeedback(gain, time) {

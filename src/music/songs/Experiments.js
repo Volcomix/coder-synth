@@ -1,13 +1,15 @@
 import Song from '../common/Song'
-import Subtractive from '../instruments/synth-secrets/Subtractive'
-import Envelope from '../instruments/synth-secrets/Envelope'
-import Formant from '../instruments/synth-secrets/Formant'
-import Speech from '../instruments/synth-secrets/Speech'
-import Scream from '../instruments/synth-secrets/Scream'
-import Feedback from '../instruments/synth-secrets/Feedback'
-import Pwm from '../instruments/synth-secrets/Pwm'
+import Subtractive from '../instruments/experiments/Subtractive'
+import Envelope from '../instruments/experiments/Envelope'
+import Formant from '../instruments/experiments/Formant'
+import Speech from '../instruments/experiments/Speech'
+import Scream from '../instruments/experiments/Scream'
+import Feedback from '../instruments/experiments/Feedback'
+import Pwm from '../instruments/experiments/Pwm'
+import MetalSinger from '../instruments/experiments/MetalSinger'
+import KarplusStrong from '../instruments/experiments/KarplusStrong'
 
-export default class SynthSecrets extends Song {
+export default class Experiments extends Song {
   tempo = 120
   notesPerBeat = 2
   tracks = {
@@ -76,6 +78,18 @@ export default class SynthSecrets extends Song {
     },
     PWM: {
       instrument: new Pwm(),
+    },
+    MetalSinger: {
+      instrument: new MetalSinger(),
+    },
+    KarplusStrong: {
+      instrument: new KarplusStrong(),
+      notes: Array.from(
+        { length: 500 },
+        () => `
+        C-4 --- --- --- C-4 --- --- ---
+      `,
+      ).join(''),
     },
   }
 }
