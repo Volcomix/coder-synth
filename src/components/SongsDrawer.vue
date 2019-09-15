@@ -12,15 +12,17 @@
     </VListItem>
     <VDivider />
     <VList dense nav>
-      <VListItem
-        v-for="(Song, songName) in songs"
-        :key="songName"
-        :to="{ name: 'song', params: { songName } }"
-      >
-        <VListItemContent>
-          <VListItemTitle>{{ songName }}</VListItemTitle>
-        </VListItemContent>
-      </VListItem>
+      <VListItemGroup color="primary">
+        <VListItem
+          v-for="(Song, songName) in songs"
+          :key="songName"
+          :to="{ name: 'song', params: { songName } }"
+        >
+          <VListItemContent>
+            <VListItemTitle>{{ songName }}</VListItemTitle>
+          </VListItemContent>
+        </VListItem>
+      </VListItemGroup>
     </VList>
   </VNavigationDrawer>
 </template>

@@ -7,17 +7,19 @@
         <VIcon dark>arrow_drop_down</VIcon>
       </VToolbarTitle>
     </template>
-    <VList>
-      <VListItem :to="{ params: { trackName: null } }" exact>
-        <VListItemTitle>All tracks</VListItemTitle>
-      </VListItem>
-      <VListItem
-        v-for="(_, name) in song.tracks"
-        :key="name"
-        :to="{ params: { trackName: name } }"
-      >
-        <VListItemTitle>{{ name }}</VListItemTitle>
-      </VListItem>
+    <VList dense nav>
+      <VListItemGroup color="primary">
+        <VListItem :to="{ params: { trackName: null } }" exact>
+          <VListItemTitle>All tracks</VListItemTitle>
+        </VListItem>
+        <VListItem
+          v-for="(_, name) in song.tracks"
+          :key="name"
+          :to="{ params: { trackName: name } }"
+        >
+          <VListItemTitle>{{ name }}</VListItemTitle>
+        </VListItem>
+      </VListItemGroup>
     </VList>
   </VMenu>
 </template>
