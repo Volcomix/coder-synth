@@ -36,6 +36,7 @@ import SongsDrawer from '../components/SongsDrawer'
 import TracksMenu from '../components/TracksMenu'
 import TrackEffects from '../components/TrackEffects'
 import Oscilloscope from '../components/Oscilloscope'
+import audioWorklets from '../music/common/audioWorklets'
 import songs from '../music/songs'
 
 export default {
@@ -87,9 +88,10 @@ export default {
     createSong() {
       this.song = new songs[this.songName](this.trackName)
     },
-    play() {
+    async play() {
       if (!this.audioContext) {
         this.createAudioContext()
+        await this.initAudioWorklets()
       }
       this.song.play(this.audioContext, this.analyser)
       this.isPlaying = true
@@ -103,6 +105,15 @@ export default {
       this.analyser = this.audioContext.createAnalyser()
       this.analyser.fftSize = 2048
       this.analyser.connect(this.audioContext.destination)
+    },
+    async initAudioWorklets() {
+      await Promise.all(
+        Object.values(audioWorklets).map(async audioWorklet => {
+          await this.audioContext.audioWorklet.addModule(
+            `/audio-worklets/${audioWorklet}.js`,
+          )
+        }),
+      )
     },
   },
 }
