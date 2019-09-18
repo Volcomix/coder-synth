@@ -1,1 +1,4 @@
-export default { delayProcessor: 'delay-processor' }
+export default {
+  delayProcessor: 'delay-processor',
+  karplusStrongProcessor: 'karplus-strong-processor',
+}
