@@ -86,11 +86,11 @@ export default class Experiments extends Song {
     },
     KarplusStrong: {
       instrument: new KarplusStrong(),
-      notes: Array.from({ length: 500 }, () => `C-4 --- --- ---`).join(' '),
+      notes: Array.from({ length: 500 }, () => `A-3 --- --- ---`).join(' '),
     },
     KarplusStrongWorklet: {
       instrument: new KarplusStrongWorklet(),
-      notes: Array.from({ length: 1 }, () => `C-4 --- --- ---`).join(' '),
+      notes: Array.from({ length: 1 }, () => `A-3 --- --- ---`).join(' '),
     },
     AudioWorklet: {
       instrument: new AudioWorkletInstrument(),
