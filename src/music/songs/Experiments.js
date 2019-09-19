@@ -10,6 +10,7 @@ import MetalSinger from '../instruments/experiments/MetalSinger'
 import KarplusStrong from '../instruments/experiments/KarplusStrong'
 import AudioWorkletInstrument from '../instruments/experiments/AudioWorkletInstrument'
 import KarplusStrongWorklet from '../instruments/experiments/KarplusStrongWorklet'
+import ExtendedKarplusStrong from '../instruments/experiments/ExtendedKarplusStrong'
 
 export default class Experiments extends Song {
   tempo = 120
@@ -90,6 +91,10 @@ export default class Experiments extends Song {
     },
     KarplusStrongWorklet: {
       instrument: new KarplusStrongWorklet(),
+      notes: Array.from({ length: 500 }, () => `A-3 --- A-4 ---`).join(' '),
+    },
+    ExtendedKarplusStrong: {
+      instrument: new ExtendedKarplusStrong(),
       notes: Array.from({ length: 500 }, () => `A-3 --- A-4 ---`).join(' '),
     },
     AudioWorklet: {
