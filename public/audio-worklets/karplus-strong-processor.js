@@ -26,7 +26,7 @@ class KarplusStrongProcessor extends AudioWorkletProcessor {
         parameters['frequency'].length > 1
           ? parameters['frequency'][i]
           : parameters['frequency'][0]
-      let rptr = this.wptr - Math.round(44100 / frequency)
+      let rptr = this.wptr - Math.round(sampleRate / frequency)
       while (rptr < 0) {
         rptr += this.N
       }
