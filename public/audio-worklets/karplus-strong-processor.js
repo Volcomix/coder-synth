@@ -1,10 +1,20 @@
 class KarplusStrongProcessor extends AudioWorkletProcessor {
   N = 4096
   A = Array.from({ length: this.N }, () => 0)
-  rptr = this.N - Math.round(44100 / 220)
   wptr = 0
 
-  process(inputs, outputs) {
+  static get parameterDescriptors() {
+    return [
+      {
+        name: 'frequency',
+        defaultValue: 1,
+        minValue: 1,
+        automationRate: 'a-rate',
+      },
+    ]
+  }
+
+  process(inputs, outputs, parameters) {
     const input = inputs[0]
     const output = outputs[0]
 
@@ -12,15 +22,19 @@ class KarplusStrongProcessor extends AudioWorkletProcessor {
     const outputChannel = output[0]
 
     for (let i = 0; i < inputChannel.length; i++) {
+      const frequency =
+        parameters['frequency'].length > 1
+          ? parameters['frequency'][i]
+          : parameters['frequency'][0]
+      let rptr = this.wptr - Math.round(44100 / frequency)
+      while (rptr < 0) {
+        rptr += this.N
+      }
       const x = inputChannel[i]
-      const y = x + (this.A[(this.rptr || this.N) - 1] + this.A[this.rptr]) / 2
+      const y = x + (this.A[(rptr || this.N) - 1] + this.A[rptr]) / 2
       this.A[this.wptr++] = y
-      this.rptr++
       if (this.wptr >= this.N) {
         this.wptr -= this.N
-      }
-      if (this.rptr >= this.N) {
-        this.rptr -= this.N
       }
       outputChannel[i] = y
     }

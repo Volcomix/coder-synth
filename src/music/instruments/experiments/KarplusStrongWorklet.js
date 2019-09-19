@@ -33,5 +33,8 @@ export default class KarplusStrongWorklet extends Instrument {
   noteOn(frequency, time) {
     this.pulse.gain.setValueAtTime(1, time)
     this.pulse.gain.setValueAtTime(0, time + 1 / frequency)
+    this.karplusStrong.parameters
+      .get('frequency')
+      .setValueAtTime(frequency, time)
   }
 }
