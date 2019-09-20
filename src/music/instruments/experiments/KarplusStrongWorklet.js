@@ -17,6 +17,8 @@ export default class KarplusStrongWorklet extends Instrument {
       context,
       audioWorklets.karplusStrongProcessor,
     )
+    this.karplusStrong.parameters.get('decayTimeT60').value = 4
+    this.karplusStrong.parameters.get('brightness').value = 0.5
 
     this.noise
       .connect(this.pulse)
@@ -36,5 +38,17 @@ export default class KarplusStrongWorklet extends Instrument {
     this.karplusStrong.parameters
       .get('frequency')
       .setValueAtTime(frequency, time)
+  }
+
+  fxDecayTimeT60(decayTimeT60, time) {
+    this.karplusStrong.parameters
+      .get('decayTimeT60')
+      .setValueAtTime((10 * decayTimeT60) / 255, time)
+  }
+
+  fxBrightness(brightness, time) {
+    this.karplusStrong.parameters
+      .get('brightness')
+      .setValueAtTime(brightness / 255, time)
   }
 }
