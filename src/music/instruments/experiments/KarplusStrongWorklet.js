@@ -20,10 +20,17 @@ export default class KarplusStrongWorklet extends Instrument {
     this.karplusStrong.parameters.get('decayTimeT60').value = 4
     this.karplusStrong.parameters.get('brightness').value = 0.5
 
+    this.widthDelay = context.createDelay()
+
+    this.stereoPanner = context.createChannelMerger(2)
+
     this.noise
       .connect(this.pulse)
       .connect(this.karplusStrong)
+      .connect(this.stereoPanner, 0, 0)
       .connect(destination)
+
+    this.karplusStrong.connect(this.widthDelay).connect(this.stereoPanner, 0, 1)
 
     this.noise.start()
   }
@@ -38,6 +45,7 @@ export default class KarplusStrongWorklet extends Instrument {
     this.karplusStrong.parameters
       .get('frequency')
       .setValueAtTime(frequency, time)
+    this.widthDelay.delayTime.setValueAtTime(0.5 / frequency, time)
   }
 
   fxDecayTimeT60(decayTimeT60, time) {
