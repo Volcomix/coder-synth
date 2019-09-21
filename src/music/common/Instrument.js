@@ -1,9 +1,8 @@
 import noteFrequencies from './noteFrequencies'
 
 export default class Instrument {
-  play(notes, effects, timePerNote, audioContext, destination) {
-    this.start(audioContext, destination)
-    let noteTime = audioContext.currentTime
+  play(notes, effects, timePerNote, startTime) {
+    let noteTime = startTime
     for (let noteIndex = 0; noteIndex < notes.length; noteIndex++) {
       const noteName = notes[noteIndex]
       if (noteName === 'OFF') {

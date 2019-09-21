@@ -4,12 +4,18 @@ export default class Song {
   }
 
   play(audioContext, destination) {
+    const startTime = audioContext.currentTime + 0.5
     if (this.trackName == null) {
       Object.values(this.tracks).forEach(track =>
-        this.playTrack(track, audioContext, destination),
+        this.playTrack(track, startTime, audioContext, destination),
       )
     } else {
-      this.playTrack(this.tracks[this.trackName], audioContext, destination)
+      this.playTrack(
+        this.tracks[this.trackName],
+        startTime,
+        audioContext,
+        destination,
+      )
     }
   }
 
@@ -21,7 +27,7 @@ export default class Song {
     }
   }
 
-  playTrack(track, audioContext, destination) {
+  playTrack(track, startTime, audioContext, destination) {
     const notes = this.parseCommands(track.notes)
     const effects =
       track.effects &&
@@ -34,13 +40,8 @@ export default class Song {
       )
     const notesPerMinute = this.notesPerBeat * this.tempo
     const secondsPerNote = 60 / notesPerMinute
-    track.instrument.play(
-      notes,
-      effects,
-      secondsPerNote,
-      audioContext,
-      destination,
-    )
+    track.instrument.start(audioContext, destination)
+    track.instrument.play(notes, effects, secondsPerNote, startTime)
   }
 
   stopTrack(track) {
