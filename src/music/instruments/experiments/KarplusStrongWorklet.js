@@ -64,15 +64,15 @@ export default class KarplusStrongWorklet extends Instrument {
     this.gain.gain.setValueAtTime((10 * gain) / 255, time)
   }
 
-  fxDecayTimeT60(decayTimeT60, time) {
-    this.karplusStrong.parameters
-      .get('decayTimeT60')
-      .setValueAtTime((10 * decayTimeT60) / 255, time)
-  }
+  // fxDecayTimeT60(decayTimeT60, time) {
+  //   this.karplusStrong.parameters
+  //     .get('decayTimeT60')
+  //     .setValueAtTime((10 * decayTimeT60) / 255, time)
+  // }
 
-  fxBrightness(brightness, time) {
-    this.karplusStrong.parameters
-      .get('brightness')
-      .setValueAtTime(brightness / 255, time)
-  }
+  // fxBrightness(brightness, time) {
+  //   this.karplusStrong.parameters
+  //     .get('brightness')
+  //     .setValueAtTime(brightness / 255, time)
+  // }
 }

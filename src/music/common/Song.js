@@ -4,7 +4,7 @@ export default class Song {
   }
 
   play(audioContext, destination) {
-    const startTime = audioContext.currentTime + 1
+    const startTime = audioContext.currentTime
     if (this.trackName == null) {
       Object.values(this.tracks).forEach(track =>
         this.playTrack(track, startTime, audioContext, destination),

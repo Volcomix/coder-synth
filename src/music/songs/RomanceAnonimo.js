@@ -8,9 +8,11 @@ export default class RomanceAnonimo extends Song {
   tracks = {
     String1: {
       instrument: new KarplusStrongWorklet(),
-      notes: Array.from(
-        { length: 100 },
-        () => `
+      notes:
+        '--- --- --- --- --- ---' +
+        Array.from(
+          { length: 100 },
+          () => `
           B-4 --- --- B-4 --- --- B-4 --- ---
           B-4 --- --- A-4 --- --- G-4 --- ---
           G-4 --- --- F#4 --- --- E-4 --- ---
@@ -29,11 +31,13 @@ export default class RomanceAnonimo extends Song {
           E-4 --- --- E-4 --- --- E-4 --- ---
           E-4 --- --- --- --- --- F#4 --- ---
         `,
-      ).join(' '),
+        ).join(' '),
       effects: {
-        gain: Array.from(
-          { length: 100 },
-          () => `
+        gain:
+          '--- --- --- --- --- ---' +
+          Array.from(
+            { length: 100 },
+            () => `
           055 --- --- --- --- --- --- --- ---
           --- --- --- --- --- --- --- --- ---
           --- --- --- --- --- --- --- --- ---
@@ -52,14 +56,16 @@ export default class RomanceAnonimo extends Song {
           --- --- --- 040 --- --- 030 --- ---
           020 --- --- --- --- --- --- --- ---
         `,
-        ).join(' '),
+          ).join(' '),
       },
     },
     String2: {
       instrument: new KarplusStrongWorklet(),
-      notes: Array.from(
-        { length: 100 },
-        () => `
+      notes:
+        '--- --- --- --- --- ---' +
+        Array.from(
+          { length: 100 },
+          () => `
           --- B-3 --- --- B-3 --- --- B-3 ---
           --- B-3 --- --- B-3 --- --- B-3 ---
           --- B-3 --- --- B-3 --- --- B-3 ---
@@ -78,16 +84,18 @@ export default class RomanceAnonimo extends Song {
           --- B-3 --- --- B-3 --- --- B-3 ---
           --- --- --- --- --- --- --- --- ---
         `,
-      ).join(' '),
+        ).join(' '),
       effects: {
         gain: `025`,
       },
     },
     String3: {
       instrument: new KarplusStrongWorklet(),
-      notes: Array.from(
-        { length: 100 },
-        () => `
+      notes:
+        '--- --- --- --- --- ---' +
+        Array.from(
+          { length: 100 },
+          () => `
           --- --- G-3 --- --- G-3 --- --- G-3
           --- --- G-3 --- --- G-3 --- --- G-3
           --- --- G-3 --- --- G-3 --- --- G-3
@@ -106,16 +114,18 @@ export default class RomanceAnonimo extends Song {
           --- --- G-3 --- --- G-3 --- --- G-3
           --- --- --- --- --- --- --- --- ---
         `,
-      ).join(' '),
+        ).join(' '),
       effects: {
         gain: `020`,
       },
     },
     String4: {
       instrument: new KarplusStrongWorklet(),
-      notes: Array.from(
-        { length: 100 },
-        () => `
+      notes:
+        '--- --- --- --- --- ---' +
+        Array.from(
+          { length: 100 },
+          () => `
           E-2 --- --- --- --- --- --- --- ---
           E-2 --- --- --- --- --- --- --- ---
           E-2 --- --- --- --- --- --- --- ---
@@ -134,7 +144,7 @@ export default class RomanceAnonimo extends Song {
           E-3 --- --- B-2 --- --- G-2 --- ---
           E-2 --- --- --- --- --- --- --- ---
         `,
-      ).join(' '),
+        ).join(' '),
       effects: {
         gain: `020`,
       },
