@@ -110,7 +110,7 @@ export default {
       await Promise.all(
         Object.values(audioWorklets).map(async audioWorklet => {
           await this.audioContext.audioWorklet.addModule(
-            `/audio-worklets/${audioWorklet}.js`,
+            `audio-worklets/${audioWorklet}.js`,
           )
         }),
       )
