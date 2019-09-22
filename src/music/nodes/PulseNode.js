@@ -26,19 +26,19 @@ export default class PulseNode extends OscillatorNode {
 
   start(...args) {
     super.start(...args)
-    this.constant.start(...args)
+    return this.constant.start(...args)
   }
 
   stop(...args) {
     super.stop(...args)
-    this.constant.stop(...args)
+    return this.constant.stop(...args)
   }
 
   connect(...args) {
-    this.shaper.connect(...args)
+    return this.shaper.connect(...args)
   }
 
   disconnect(...args) {
-    this.shaper.disconnect(...args)
+    return this.shaper.disconnect(...args)
   }
 }

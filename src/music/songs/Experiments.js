@@ -8,7 +8,7 @@ import Feedback from '../instruments/experiments/Feedback'
 import Pwm from '../instruments/experiments/Pwm'
 import MetalSinger from '../instruments/experiments/MetalSinger'
 import KarplusStrong from '../instruments/experiments/KarplusStrong'
-import KarplusStrongWorklet from '../instruments/experiments/KarplusStrongWorklet'
+import Guitar from '../instruments/experiments/Guitar'
 
 export default class Experiments extends Song {
   tempo = 120
@@ -87,13 +87,13 @@ export default class Experiments extends Song {
       instrument: new KarplusStrong(),
       notes: Array.from({ length: 500 }, () => `A-3 --- --- ---`).join(' '),
     },
-    KarplusStrongWorklet: {
-      instrument: new KarplusStrongWorklet(),
+    Guitar: {
+      instrument: new Guitar(),
       notes: Array.from(
         { length: 500 },
         () => `
-          A-2 --- A-3 --- A-4 --- A-5 ---
-        `,
+          A-3 --- --- ---
+      `,
       ).join(' '),
     },
   }
