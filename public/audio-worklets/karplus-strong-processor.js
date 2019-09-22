@@ -1,3 +1,5 @@
+/* global sampleRate:readonly */
+
 class KarplusStrongProcessor extends AudioWorkletProcessor {
   N = 4096
   A = Array.from({ length: this.N }, () => 0)
