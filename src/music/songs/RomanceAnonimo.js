@@ -1,6 +1,8 @@
 import Song from '../common/Song'
 import KarplusStrongWorklet from '../instruments/experiments/KarplusStrongWorklet'
 
+const repeat = 2
+
 // Jeux interdits
 export default class RomanceAnonimo extends Song {
   tempo = 110
@@ -11,7 +13,7 @@ export default class RomanceAnonimo extends Song {
       notes:
         '--- --- --- --- --- ---' +
         Array.from(
-          { length: 100 },
+          { length: repeat },
           () => `
           B-4 --- --- B-4 --- --- B-4 --- ---
           B-4 --- --- A-4 --- --- G-4 --- ---
@@ -29,16 +31,18 @@ export default class RomanceAnonimo extends Song {
           F#4 --- --- F#4 --- --- F#4 --- ---
           F#4 --- --- G-4 --- --- F#4 --- ---
           E-4 --- --- E-4 --- --- E-4 --- ---
-          E-4 --- --- --- --- --- F#4 --- ---
+          E-4 --- --- --- --- ---
         `,
-        ).join(' '),
+        ).join(`
+          F#4 --- ---
+        `),
       effects: {
         gain:
           '--- --- --- --- --- ---' +
           Array.from(
-            { length: 100 },
+            { length: repeat },
             () => `
-          055 --- --- --- --- --- --- --- ---
+          050 --- --- --- --- --- --- --- ---
           --- --- --- --- --- --- --- --- ---
           --- --- --- --- --- --- --- --- ---
           --- --- --- --- --- --- --- --- ---
@@ -54,9 +58,11 @@ export default class RomanceAnonimo extends Song {
           --- --- --- --- --- --- --- --- ---
           --- --- --- --- --- --- --- --- ---
           --- --- --- 040 --- --- 030 --- ---
-          020 --- --- --- --- --- --- --- ---
+          020 --- --- --- --- ---
         `,
-          ).join(' '),
+          ).join(`
+          030 --- ---
+        `),
       },
     },
     String2: {
@@ -64,7 +70,7 @@ export default class RomanceAnonimo extends Song {
       notes:
         '--- --- --- --- --- ---' +
         Array.from(
-          { length: 100 },
+          { length: repeat },
           () => `
           --- B-3 --- --- B-3 --- --- B-3 ---
           --- B-3 --- --- B-3 --- --- B-3 ---
@@ -82,11 +88,16 @@ export default class RomanceAnonimo extends Song {
           --- B-3 --- --- B-3 --- --- B-3 ---
           --- B-3 --- --- B-3 --- --- B-3 ---
           --- B-3 --- --- B-3 --- --- B-3 ---
-          --- --- --- --- --- --- --- --- ---
+          --- --- --- --- --- ---
         `,
-        ).join(' '),
+        ).join(`
+          --- --- ---
+        `),
       effects: {
-        gain: `025`,
+        gain: `
+          --- --- --- --- --- ---
+          020
+        `,
       },
     },
     String3: {
@@ -94,7 +105,7 @@ export default class RomanceAnonimo extends Song {
       notes:
         '--- --- --- --- --- ---' +
         Array.from(
-          { length: 100 },
+          { length: repeat },
           () => `
           --- --- G-3 --- --- G-3 --- --- G-3
           --- --- G-3 --- --- G-3 --- --- G-3
@@ -112,11 +123,16 @@ export default class RomanceAnonimo extends Song {
           --- --- A-3 --- --- A-3 --- --- A-3
           --- --- A-3 --- --- A-3 --- --- A-3
           --- --- G-3 --- --- G-3 --- --- G-3
-          --- --- --- --- --- --- --- --- ---
+          --- --- --- --- --- ---
         `,
-        ).join(' '),
+        ).join(`
+          --- --- ---
+        `),
       effects: {
-        gain: `020`,
+        gain: `
+          --- --- --- --- --- ---
+          020
+        `,
       },
     },
     String4: {
@@ -124,7 +140,7 @@ export default class RomanceAnonimo extends Song {
       notes:
         '--- --- --- --- --- ---' +
         Array.from(
-          { length: 100 },
+          { length: repeat },
           () => `
           E-2 --- --- --- --- --- --- --- ---
           E-2 --- --- --- --- --- --- --- ---
@@ -142,11 +158,16 @@ export default class RomanceAnonimo extends Song {
           B-2 --- --- --- --- --- --- --- ---
           D#3 --- --- --- --- --- --- --- ---
           E-3 --- --- B-2 --- --- G-2 --- ---
-          E-2 --- --- --- --- --- --- --- ---
+          E-2 --- --- --- --- ---
         `,
-        ).join(' '),
+        ).join(`
+          --- --- ---
+        `),
       effects: {
-        gain: `020`,
+        gain: `
+          --- --- --- --- --- ---
+          015
+        `,
       },
     },
   }
