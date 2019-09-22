@@ -35,10 +35,10 @@ export default {
   props: {
     value: Boolean,
   },
-  computed: {
-    songs() {
-      return songs
-    },
+  data() {
+    return {
+      songs,
+    }
   },
 }
 </script>

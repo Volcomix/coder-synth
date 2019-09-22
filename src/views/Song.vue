@@ -48,6 +48,8 @@ export default {
   },
   data() {
     return {
+      songs,
+      publicPath: process.env.BASE_URL,
       drawer: null,
       audioContext: null,
       analyser: null,
@@ -56,9 +58,6 @@ export default {
     }
   },
   computed: {
-    songs() {
-      return songs
-    },
     songName() {
       return this.$route.params.songName
     },
@@ -110,7 +109,7 @@ export default {
       await Promise.all(
         Object.values(audioWorklets).map(async audioWorklet => {
           await this.audioContext.audioWorklet.addModule(
-            `${process.env.BASE_URL}audio-worklets/${audioWorklet}.js`,
+            `${this.publicPath}audio-worklets/${audioWorklet}.js`,
           )
         }),
       )
