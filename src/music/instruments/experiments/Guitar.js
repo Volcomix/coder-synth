@@ -14,6 +14,10 @@ export default class Guitar extends Instrument {
     this.burst = context.createGain()
     this.burst.gain.value = 0
 
+    this.pickDirection = context.createBiquadFilter()
+    this.pickDirection.type = 'highshelf'
+    this.pickDirection.frequency.value = 5000
+
     this.karplusStrong = new AudioWorkletNode(
       context,
       audioWorklets.karplusStrongProcessor,
@@ -24,6 +28,7 @@ export default class Guitar extends Instrument {
 
     this.noise
       .connect(this.burst)
+      .connect(this.pickDirection)
       .connect(this.karplusStrong)
       .connect(destination)
 
@@ -58,5 +63,13 @@ export default class Guitar extends Instrument {
     this.karplusStrong.parameters
       .get('brightness')
       .setValueAtTime(brightness / 255, time)
+  }
+
+  // fxPickDirectionFrequency(frequency, time) {
+  //   this.pickDirection.frequency.setValueAtTime(frequency * 100, time)
+  // }
+
+  fxPickDirection(direction, time) {
+    this.pickDirection.gain.setValueAtTime(direction && -25, time)
   }
 }
