@@ -26,17 +26,34 @@ export default class Guitar extends Instrument {
     this.karplusStrong.parameters.get('decayTimeT60').value = 4
     this.karplusStrong.parameters.get('brightness').value = 0.5
 
+    this.offset = context.createConstantSource()
+    this.offset.offset.value = 0
+
+    this.pregain = context.createGain()
+
+    this.distortion = context.createWaveShaper()
+    this.distortion.curve = Float32Array.from({ length: 4096 }, (v, i) => {
+      const x = (i * 2) / 4096 - 1
+      return x - (x * x * x) / 3
+    })
+
     this.noise
       .connect(this.burst)
       .connect(this.pickDirection)
       .connect(this.karplusStrong)
+      .connect(this.pregain)
+      .connect(this.distortion)
       .connect(destination)
 
+    this.offset.connect(this.pregain)
+
     this.noise.start()
+    this.offset.start()
   }
 
   stop() {
     this.noise.stop()
+    this.offset.stop()
   }
 
   noteOn(_frequency, time) {
@@ -71,5 +88,14 @@ export default class Guitar extends Instrument {
 
   fxPickDirection(direction, time) {
     this.pickDirection.gain.setValueAtTime(direction && -25, time)
+  }
+
+  fxOffset(offset, time) {
+    this.offset.offset.setValueAtTime((0.5 * offset) / 255, time)
+  }
+
+  fxDrive(drive, time) {
+    drive = drive / 255
+    this.pregain.gain.setValueAtTime(10 ** (2 * drive), time)
   }
 }
