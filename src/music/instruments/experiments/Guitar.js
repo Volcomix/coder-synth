@@ -43,7 +43,7 @@ export default class Guitar extends Instrument {
     this.offset = context.createConstantSource()
     this.offset.offset.value = 0
 
-    this.pregain = context.createGain()
+    this.preGain = context.createGain()
 
     this.distortion = context.createWaveShaper()
     this.distortion.curve = Float32Array.from({ length: 4096 }, (v, i) => {
@@ -52,14 +52,26 @@ export default class Guitar extends Instrument {
     })
     this.distortion.oversample = '4x'
 
+    this.postGain = context.createGain()
+    this.postGain.gain.value = 0
+
+    this.directGain = context.createGain()
+
+    this.feedbackGain = context.createGain()
+    this.feedbackGain.gain.value = 0
+
+    this.feedbackDelay = context.createDelay()
+    this.feedbackDelay.delayTime.value = 0.1
+
     this.noise
       .connect(this.burst)
       .connect(this.pickDirection)
       .connect(this.pickPositionDelay)
       .connect(this.pickPositionGain)
       .connect(this.karplusStrong)
-      .connect(this.pregain)
+      .connect(this.preGain)
       .connect(this.distortion)
+      .connect(this.postGain)
       .connect(destination)
 
     this.frequency.connect(this.karplusStrong.parameters.get('frequency'))
@@ -69,7 +81,14 @@ export default class Guitar extends Instrument {
       .connect(this.pickPositionDelay.delayTime)
 
     this.pickDirection.connect(this.karplusStrong)
-    this.offset.connect(this.pregain)
+    this.offset.connect(this.preGain)
+
+    this.karplusStrong.connect(this.directGain).connect(destination)
+
+    this.distortion
+      .connect(this.feedbackGain)
+      .connect(this.feedbackDelay)
+      .connect(this.pickDirection)
 
     this.frequency.start()
     this.period.start()
@@ -127,6 +146,22 @@ export default class Guitar extends Instrument {
 
   fxDrive(drive, time) {
     drive = drive / 255
-    this.pregain.gain.setValueAtTime(10 ** (2 * drive), time)
+    this.preGain.gain.setValueAtTime(10 ** (2 * drive), time)
+  }
+
+  fxPostGain(gain, time) {
+    this.postGain.gain.setValueAtTime(gain / 255, time)
+  }
+
+  fxDirectGain(gain, time) {
+    this.directGain.gain.setValueAtTime(gain / 255, time)
+  }
+
+  fxFeedbackGain(gain, time) {
+    this.feedbackGain.gain.setValueAtTime(gain / 255, time)
+  }
+
+  fxFeedbackDelay(delay, time) {
+    this.feedbackDelay.delayTime.setValueAtTime(delay / 255, time)
   }
 }
