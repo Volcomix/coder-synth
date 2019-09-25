@@ -9,6 +9,12 @@ export default class Guitar extends Instrument {
    * @param {AudioDestinationNode} destination
    */
   start(context, destination) {
+    this.frequency = context.createConstantSource()
+    this.frequency.offset.value = 220
+
+    this.period = context.createConstantSource()
+    this.period.offset.value = 1 / 220
+
     this.noise = new NoiseNode(context, 2.1)
 
     this.burst = context.createGain()
@@ -16,13 +22,21 @@ export default class Guitar extends Instrument {
 
     this.pickDirection = context.createBiquadFilter()
     this.pickDirection.type = 'highshelf'
-    this.pickDirection.frequency.value = 5000
+    this.pickDirection.frequency.value = 10000
+
+    this.pickPosition = context.createGain()
+    this.pickPosition.gain.value = 0.13
+
+    this.pickPositionDelay = context.createDelay()
+    this.pickPositionDelay.delayTime.value = 0
+
+    this.pickPositionGain = context.createGain()
+    this.pickPositionGain.gain.value = -1
 
     this.karplusStrong = new AudioWorkletNode(
       context,
       audioWorklets.karplusStrongProcessor,
     )
-    this.karplusStrong.parameters.get('frequency').value = 220
     this.karplusStrong.parameters.get('decayTimeT60').value = 4
     this.karplusStrong.parameters.get('brightness').value = 0.5
 
@@ -36,22 +50,36 @@ export default class Guitar extends Instrument {
       const x = (i * 2) / 4096 - 1
       return x - (x * x * x) / 3
     })
+    this.distortion.oversample = '4x'
 
     this.noise
       .connect(this.burst)
       .connect(this.pickDirection)
+      .connect(this.pickPositionDelay)
+      .connect(this.pickPositionGain)
       .connect(this.karplusStrong)
       .connect(this.pregain)
       .connect(this.distortion)
       .connect(destination)
 
+    this.frequency.connect(this.karplusStrong.parameters.get('frequency'))
+
+    this.period
+      .connect(this.pickPosition)
+      .connect(this.pickPositionDelay.delayTime)
+
+    this.pickDirection.connect(this.karplusStrong)
     this.offset.connect(this.pregain)
 
+    this.frequency.start()
+    this.period.start()
     this.noise.start()
     this.offset.start()
   }
 
   stop() {
+    this.frequency.stop()
+    this.period.stop()
     this.noise.stop()
     this.offset.stop()
   }
@@ -64,9 +92,8 @@ export default class Guitar extends Instrument {
   fxPitch(pitch, time) {
     const frequency = Object.values(noteFrequencies)[pitch]
     if (frequency) {
-      this.karplusStrong.parameters
-        .get('frequency')
-        .setValueAtTime(frequency, time)
+      this.frequency.offset.setValueAtTime(frequency, time)
+      this.period.offset.setValueAtTime(1 / frequency, time)
     }
   }
 
@@ -82,12 +109,16 @@ export default class Guitar extends Instrument {
       .setValueAtTime(brightness / 255, time)
   }
 
-  // fxPickDirectionFrequency(frequency, time) {
-  //   this.pickDirection.frequency.setValueAtTime(frequency * 100, time)
-  // }
+  fxPickDirectionFrequency(frequency, time) {
+    this.pickDirection.frequency.setValueAtTime(frequency * 100, time)
+  }
 
   fxPickDirection(direction, time) {
     this.pickDirection.gain.setValueAtTime(direction && -25, time)
+  }
+
+  fxPickPosition(position, time) {
+    this.pickPosition.gain.setValueAtTime((0.5 * position) / 255, time)
   }
 
   fxOffset(offset, time) {
