@@ -20,6 +20,9 @@ export default class Guitar extends Instrument {
     this.burst = context.createGain()
     this.burst.gain.value = 0
 
+    this.gain = context.createGain()
+    this.gain.gain.value = 1
+
     this.pickDirection = context.createBiquadFilter()
     this.pickDirection.type = 'highshelf'
     this.pickDirection.frequency.value = 10000
@@ -32,6 +35,11 @@ export default class Guitar extends Instrument {
 
     this.pickPositionGain = context.createGain()
     this.pickPositionGain.gain.value = -1
+
+    this.levelFilter = context.createBiquadFilter()
+    this.levelFilter.type = 'highshelf'
+    this.levelFilter.frequency.value = 10000
+    this.levelFilter.gain.value = -10
 
     this.karplusStrong = new AudioWorkletNode(
       context,
@@ -52,6 +60,11 @@ export default class Guitar extends Instrument {
     })
     this.distortion.oversample = '4x'
 
+    this.dcBlocker = context.createBiquadFilter()
+    this.dcBlocker.type = 'lowshelf'
+    this.dcBlocker.frequency.value = 30
+    this.dcBlocker.gain.value = -10
+
     this.postGain = context.createGain()
     this.postGain.gain.value = 0
 
@@ -65,30 +78,34 @@ export default class Guitar extends Instrument {
 
     this.noise
       .connect(this.burst)
+      .connect(this.gain)
       .connect(this.pickDirection)
       .connect(this.pickPositionDelay)
       .connect(this.pickPositionGain)
+      .connect(this.levelFilter)
       .connect(this.karplusStrong)
       .connect(this.preGain)
       .connect(this.distortion)
+      .connect(this.dcBlocker)
       .connect(this.postGain)
       .connect(destination)
 
     this.frequency.connect(this.karplusStrong.parameters.get('frequency'))
+    this.frequency.connect(this.levelFilter.frequency)
 
     this.period
       .connect(this.pickPosition)
       .connect(this.pickPositionDelay.delayTime)
 
-    this.pickDirection.connect(this.karplusStrong)
+    this.pickDirection.connect(this.levelFilter)
     this.offset.connect(this.preGain)
 
     this.karplusStrong.connect(this.directGain).connect(destination)
 
-    this.distortion
+    this.dcBlocker
       .connect(this.feedbackGain)
       .connect(this.feedbackDelay)
-      .connect(this.pickDirection)
+      .connect(this.karplusStrong)
 
     this.frequency.start()
     this.period.start()
@@ -116,16 +133,8 @@ export default class Guitar extends Instrument {
     }
   }
 
-  fxDecayTimeT60(decayTimeT60, time) {
-    this.karplusStrong.parameters
-      .get('decayTimeT60')
-      .setValueAtTime((10 * decayTimeT60) / 255, time)
-  }
-
-  fxBrightness(brightness, time) {
-    this.karplusStrong.parameters
-      .get('brightness')
-      .setValueAtTime(brightness / 255, time)
+  fxGain(gain, time) {
+    this.gain.gain.setValueAtTime((10 * gain) / 255, time)
   }
 
   fxPickDirectionFrequency(frequency, time) {
@@ -138,6 +147,26 @@ export default class Guitar extends Instrument {
 
   fxPickPosition(position, time) {
     this.pickPosition.gain.setValueAtTime((0.5 * position) / 255, time)
+  }
+
+  fxLevelFilterFrequency(frequency, time) {
+    this.levelFilter.frequency.setValueAtTime(frequency * 100, time)
+  }
+
+  fxLevelFilterGain(gain, time) {
+    this.levelFilter.gain.setValueAtTime(-gain, time)
+  }
+
+  fxDecayTime(decayTimeT60, time) {
+    this.karplusStrong.parameters
+      .get('decayTimeT60')
+      .setValueAtTime((10 * decayTimeT60) / 255, time)
+  }
+
+  fxBrightness(brightness, time) {
+    this.karplusStrong.parameters
+      .get('brightness')
+      .setValueAtTime(brightness / 255, time)
   }
 
   fxOffset(offset, time) {
@@ -158,10 +187,18 @@ export default class Guitar extends Instrument {
   }
 
   fxFeedbackGain(gain, time) {
-    this.feedbackGain.gain.setValueAtTime(gain / 255, time)
+    this.feedbackGain.gain.setValueAtTime((0.01 * gain) / 255, time)
   }
 
   fxFeedbackDelay(delay, time) {
-    this.feedbackDelay.delayTime.setValueAtTime(delay / 255, time)
+    this.feedbackDelay.delayTime.setValueAtTime((0.1 * delay) / 255, time)
+  }
+
+  fxDcBlockFrequency(frequency, time) {
+    this.dcBlocker.frequency.setValueAtTime(10 * frequency, time)
+  }
+
+  fxDcBlockerGain(gain, time) {
+    this.dcBlocker.gain.setValueAtTime(-gain, time)
   }
 }
