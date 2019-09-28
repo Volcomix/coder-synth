@@ -3,6 +3,11 @@ import audioWorklets from '../../common/audioWorklets'
 import noteFrequencies from '../../common/noteFrequencies'
 import NoiseNode from '../../nodes/NoiseNode'
 
+const distortionCurve = Float32Array.from({ length: 4096 }, (_, i) => {
+  const x = 2 * (i / 4096) - 1
+  return x - (x * x * x) / 3
+})
+
 export default class Guitar extends Instrument {
   /**
    * @param {AudioContext} context
@@ -54,10 +59,7 @@ export default class Guitar extends Instrument {
     this.preGain = context.createGain()
 
     this.distortion = context.createWaveShaper()
-    this.distortion.curve = Float32Array.from({ length: 4096 }, (v, i) => {
-      const x = (i * 2) / 4096 - 1
-      return x - (x * x * x) / 3
-    })
+    this.distortion.curve = distortionCurve
     this.distortion.oversample = '4x'
 
     this.dcBlocker = context.createBiquadFilter()
@@ -134,11 +136,11 @@ export default class Guitar extends Instrument {
   }
 
   fxGain(gain, time) {
-    this.gain.gain.setValueAtTime((10 * gain) / 255, time)
+    this.gain.gain.setValueAtTime(gain / 255, time)
   }
 
   fxPickDirectionFrequency(frequency, time) {
-    this.pickDirection.frequency.setValueAtTime(frequency * 100, time)
+    this.pickDirection.frequency.setValueAtTime(100 * frequency, time)
   }
 
   fxPickDirection(direction, time) {
@@ -146,11 +148,11 @@ export default class Guitar extends Instrument {
   }
 
   fxPickPosition(position, time) {
-    this.pickPosition.gain.setValueAtTime((0.5 * position) / 255, time)
+    this.pickPosition.gain.setValueAtTime(0.5 * (position / 255), time)
   }
 
   fxLevelFilterFrequency(frequency, time) {
-    this.levelFilter.frequency.setValueAtTime(frequency * 100, time)
+    this.levelFilter.frequency.setValueAtTime(100 * frequency, time)
   }
 
   fxLevelFilterGain(gain, time) {
@@ -160,7 +162,7 @@ export default class Guitar extends Instrument {
   fxDecayTime(decayTimeT60, time) {
     this.karplusStrong.parameters
       .get('decayTimeT60')
-      .setValueAtTime((10 * decayTimeT60) / 255, time)
+      .setValueAtTime(10 * (decayTimeT60 / 255), time)
   }
 
   fxBrightness(brightness, time) {
@@ -170,11 +172,11 @@ export default class Guitar extends Instrument {
   }
 
   fxOffset(offset, time) {
-    this.offset.offset.setValueAtTime((0.5 * offset) / 255, time)
+    this.offset.offset.setValueAtTime(0.5 * (offset / 255), time)
   }
 
   fxDrive(drive, time) {
-    drive = drive / 255
+    drive = (10 * drive) / 255
     this.preGain.gain.setValueAtTime(10 ** (2 * drive), time)
   }
 
@@ -187,11 +189,15 @@ export default class Guitar extends Instrument {
   }
 
   fxFeedbackGain(gain, time) {
-    this.feedbackGain.gain.setValueAtTime((0.01 * gain) / 255, time)
+    this.feedbackGain.gain.setValueAtTime(0.02 * (gain / 255), time)
   }
 
   fxFeedbackDelay(delay, time) {
-    this.feedbackDelay.delayTime.setValueAtTime((0.1 * delay) / 255, time)
+    this.feedbackDelay.delayTime.setValueAtTime(0.03 * (delay / 255), time)
+  }
+
+  fxFeedbackFrequency(frequency, time) {
+    this.feedbackDelay.delayTime.setValueAtTime(1 / (10 * frequency), time)
   }
 
   fxDcBlockFrequency(frequency, time) {
