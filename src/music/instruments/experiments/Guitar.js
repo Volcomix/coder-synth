@@ -99,6 +99,8 @@ export default class Guitar extends Instrument {
     this.frequency.stop()
     this.period.stop()
     this.noise.stop()
+    this.karplusStrong.parameters.get('decayTimeT60').value = 0
+    this.feedbackGain.gain.value = 0
   }
 
   noteOn(frequency, time) {
