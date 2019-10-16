@@ -1,7 +1,11 @@
 <template>
-  <VRow ref="oscilloscope" v-resize="resize" class="oscilloscope my-3">
+  <div
+    ref="oscilloscope"
+    v-resize="resize"
+    class="oscilloscope my-3 flex-grow-1"
+  >
     <canvas ref="canvas" class="canvas" :width="width" :height="height" />
-  </VRow>
+  </div>
 </template>
 
 <script>

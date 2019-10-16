@@ -16,17 +16,14 @@
       </VToolbarItems>
     </VAppBar>
     <VContent>
-      <VContainer
-        class="fill-height pa-0 d-flex flex-column align-stretch"
-        fluid
-      >
+      <div class="fill-height d-flex flex-column">
         <Oscilloscope :key="`${songName}-${trackName}`" :analyser="analyser" />
         <TrackEffects
           v-if="instrument"
           :instrument="instrument"
           :is-playing="isPlaying"
         />
-      </VContainer>
+      </div>
     </VContent>
   </VApp>
 </template>
