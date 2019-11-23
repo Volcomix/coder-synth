@@ -104,6 +104,7 @@ export default {
     },
     async initAudioWorklets() {
       if (!this.audioContext.audioContext) {
+        // eslint-disable-next-line no-console
         console.warn('AudioWorklets are not supported by your browser!')
         return
       }
