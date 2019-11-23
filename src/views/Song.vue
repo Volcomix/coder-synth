@@ -103,6 +103,10 @@ export default {
       this.analyser.connect(this.audioContext.destination)
     },
     async initAudioWorklets() {
+      if (!this.audioContext.audioContext) {
+        console.warn('AudioWorklets are not supported by your browser!')
+        return
+      }
       await Promise.all(
         Object.values(audioWorklets).map(async audioWorklet => {
           await this.audioContext.audioWorklet.addModule(
