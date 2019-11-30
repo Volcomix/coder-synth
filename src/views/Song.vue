@@ -103,7 +103,7 @@ export default {
       this.analyser.connect(this.audioContext.destination)
     },
     async initAudioWorklets() {
-      if (!this.audioContext.audioContext) {
+      if (!this.audioContext.audioWorklet) {
         // eslint-disable-next-line no-console
         console.warn('AudioWorklets are not supported by your browser!')
         return
