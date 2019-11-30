@@ -6,7 +6,7 @@ This playground has initially been created for a hands-on workshop. You may want
 
 ## How to use this playground
 
-* go in [this codesandbox](https://codesandbox.io/s/github/volcomix/coder-synth/workshop) right now
+* go in [this codesandbox](https://codesandbox.io/s/github/volcomix/coder-synth/tree/workshop) right now
 * or you can just try [the UI here](https://volcomix.github.io/coder-synth/Demo/Example).
 * or `git clone` this repo and code in your favorite editor.
 
